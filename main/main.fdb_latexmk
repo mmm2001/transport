@@ -1,14 +1,13 @@
 # Fdb version 4
-["pdflatex"] 1767547160.71187 "/home/matvey/stud/transport/questions_latex/transport/main/main.tex" "main.pdf" "main" 1767547161.44988 0
-  "../M/../M/1.3.tex" 1767547069.06808 423 286d5602ac7f7bb55230ad044889f9f8 ""
-  "../M/1.3.tex" 1767547069.06808 423 286d5602ac7f7bb55230ad044889f9f8 ""
+["pdflatex"] 1767547683.89833 "/home/matvey/stud/transport/questions_latex/transport/main/main.tex" "main.pdf" "main" 1767547684.62819 0
+  "../M/1.3/1.3.tex" 1767547659.89 448 d9930a4aa17adc447ea5d1f46f17e4f8 ""
   "/etc/texmf/web2c/texmf.cnf" 1767476596.52374 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/home/matvey/.texlive2023/texmf-var/fonts/tfm/lh/lh-t2a/labx1728.tfm" 1767477410.82477 3312 d199be9bd555944e2403193d58a0256a ""
   "/home/matvey/.texlive2023/texmf-var/fonts/tfm/lh/lh-t2a/larm1200.tfm" 1767476927.45478 3240 c2435f2b5cd66d4930bc29b8df87967e ""
   "/home/matvey/.texlive2023/texmf-var/fonts/tfm/lh/lh-t2a/larm1440.tfm" 1767476932.4173 3256 3daaa33cf35cf3f354983aa3214ecd7f ""
   "/home/matvey/.texlive2023/texmf-var/fonts/tfm/lh/lh-t2a/larm1728.tfm" 1767476922.73309 3252 92d08740ce00199d6cf9ff4aaada81d1 ""
   "/home/matvey/.texlive2023/texmf-var/fonts/tfm/lh/lh-t2a/larm2074.tfm" 1767477530.29528 3264 03c2b9e4787a40d3b9c197c38b93b558 ""
-  "/home/matvey/stud/transport/questions_latex/transport/main/main.tex" 1767547160.47511 604 0aeead0313c490796e789ba413151eee ""
+  "/home/matvey/stud/transport/questions_latex/transport/main/main.tex" 1767547684.3087 608 5d049303e37a475deaa79670c2e3c600 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam10.tfm" 1246382020 916 f87d7c45f9c908e672703b83b72241a3 ""
@@ -95,10 +94,10 @@
   "/usr/share/texmf/web2c/texmf.cnf" 1707919699 40399 f2c302f7d2af602abb742093540a5834 ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1767476628.22617 5472669 54eaf61a88b6b7896ebd0dac973cb29c ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1767476689 8214999 638a0fc1fc62d7f533707992db624d60 ""
-  "main.aux" 1767547161.37809 262 9b935d62716ad8a6c35ae524c80ec52f "pdflatex"
-  "main.out" 1767547161.27009 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
-  "main.tex" 1767547160.47511 604 0aeead0313c490796e789ba413151eee ""
-  "main.toc" 1767547161.37909 30 2d8a1fef41d29eebbad5d03729944434 "pdflatex"
+  "main.aux" 1767547684.55479 262 9b935d62716ad8a6c35ae524c80ec52f "pdflatex"
+  "main.out" 1767547684.46315 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "main.tex" 1767547684.3087 608 5d049303e37a475deaa79670c2e3c600 ""
+  "main.toc" 1767547684.55689 30 2d8a1fef41d29eebbad5d03729944434 "pdflatex"
   (generated)
   "main.aux"
   "main.log"
