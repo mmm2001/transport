@@ -1,0 +1,75 @@
+\documentclass[../../main/main.tex]{subfiles}
+
+\begin{document}
+\section{Понятие о средней длине пробега и ее связь с макросечением}
+
+Для того, чтобы ввести понятия средней длины пробега и макросечения, разберемся, как описывается реакция, например -- реакция захвата.
+
+Рассматривается квадратная пластинка толщиной, например, 1 атом. В $1$ см$^2$ $N_\alpha$ атомов вещества.
+$\sigma$ [см$^2$] -- площадь эффективного сечения, попадая в которое нейтрон взаимодействует с ядром. 
+
+Имеется поток нейтронов плотностью $\nu_0$. 
+
+$\nu_0$ -- количество нейтронов, попадающих на $1$ см$^2$ в $1$ секунду.
+$\nu_1$ -- количество нейтронов, вылетающих с обратной стороны пластинки.
+
+Вероятность поглощения (захвата): 
+\begin{equation*}
+p = \frac{\nu_0-\nu_1}{\nu_0} = N_\alpha ~\sigma
+\end{equation*}
+
+\begin{equation*}
+\sigma = \frac{1}{N_\alpha}\left(1-\frac{\nu_1}{\nu_0}\right)
+\end{equation*}
+-- обратное дифференциального сечения захвата.
+
+\begin{figure}[h!]
+\includegraphics[width = 0.5\textwidth]{2.2_pic1.png}
+\end{figure}
+
+$\rho$ -- плотность вещества.
+\begin{equation*}
+N = \frac{\rho ~ N_\alpha}{A}
+\end{equation*}
+$N_\alpha$ -- число Авогадро, $6.022 \cdot 10^{23}$ 1/моль.
+измеряется в см$^{-3}$.
+\begin{equation*}
+N_{\Delta x} = \frac{\rho ~ N_\alpha}{A} \Delta x
+\end{equation*}
+
+\begin{equation*}
+p(\Delta x) = 1 - \frac{\nu(x+\Delta x)}{\nu(x)} = \underbrace{\sigma N_{\Delta x}}_{\sigma \frac{\rho ~ N_\alpha}{A} \Delta x }
+\end{equation*}
+
+\begin{equation*}
+\frac{\nu(x) - \nu(x+\Delta x)}{\nu(x)} = \sigma \Delta x \frac{\rho N_\alpha}{A}
+\end{equation*}
+\begin{equation*}
+\frac{\nu (x+ \Delta x) - \nu (x)}{\Delta x} + \sigma \underbrace{ \frac{\rho N_A}{A} }_{=:N} \nu (x)  = 0
+\end{equation*}
+Устремляя $\Delta x \rightarrow 0$ получаем дифференциальное уравнение:
+
+\begin{equation*}
+\nu' + \sigma N \nu = 0
+\end{equation*}
+
+Как обычно интегрируем его, получаем
+
+\begin{equation*}
+\nu (H) = \nu_0 e^{-\sigma NH}
+\end{equation*}
+
+$\Sigma = \sigma N$ -- \textbf{макроскопическое сечение захвата}. Тогда \textbf{расстояние пробега}, т.е. среднее расстояние на котором захватится нейтрон:
+
+\begin{equation*}
+l = \frac{1}{\Sigma}
+\end{equation*}
+
+Если есть однородная задача с характерными параметрами $H$, то она характеризуется \textbf{оптической толщиной} $\Sigma H$.
+
+\begin{figure}[h!]
+\includegraphics[width = 0.5\textwidth]{2.2_pic2.png}
+\end{figure}
+
+
+\end{document}
