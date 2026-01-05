@@ -1,0 +1,139 @@
+\documentclass[../../main/main.tex]{subfiles}
+
+\begin{document}
+\section{Диссипативно-дисперсионный анализ (Фурье-анализ) разностных схем}
+
+\textbf{(Информация из книги В.М. Головизнина)}
+
+Фурье-анализ разностных схем состоит в подстановке частного решения для однородного дискретного оператора: бегущей волны 
+\begin{equation*}
+y_m^n = e^{i[\omega n \tau - kmh]} = q^n e^{-ikmh}
+\end{equation*}
+где $q^n = e^{i\omega\tau}$, и последующем анализе полученных зависимостей решения от дискретного оператора.
+
+\begin{itemize}
+
+\item $e^{ikmh}$ -- \textbf{Фурье-гармоника}. Обозначим $\varphi := kh$. Выбирается $-\pi < \varphi < \pi$ вместо $-\infty < \varphi < \infty$ из за ошибки выборки частот.
+
+\item $q$ -- \textbf{множитель перехода} на следующий слой.
+
+\item Соотношение, выражающее множитель перехода через параметры дискретного оператора называется \textbf{характеристическим уравнением} разностной схемы.
+\end{itemize}
+
+Устойчивость схемы достаточно исследовать для однородного уравнения, т.к. из устойчивости по начальным данным следует устойчивость по правой части.
+
+Если для заданного $\sigma$ амплитуды всех волн при $-\pi < \varphi < \pi$ не возрастают, то говорят, что данное $\sigma$ принадлежит \textbf{области устойчивости} дискретного оператора. Если в области устойчивости $|q|=1$ для любой волны, то дискретный оператор \textbf{бездиссипативен}. $|q|<1$ -- наблюдается \textbf{численная диссипация}.
+
+Пусть $q = F(\sigma, kh)$.
+$q=e^{i \omega \tau}$, откуда следует \textbf{дисперсионное соотношение}
+\begin{equation*}
+\omega = -\frac{i}{\tau} \operatorname{arg}[F(\sigma, kh)]
+\end{equation*}
+Отсюда можно получить выражение для \textbf{приведенной фазовой скорости} бегущих волн:
+\begin{equation*}
+\gamma (\sigma, kh) = \frac{\omega}{kc} = - \frac{i}{\sigma kh} \operatorname{arg}[F(\sigma,kh)]
+\end{equation*}
+\textbf{Дисперсией} называется зависимость фазовой скорости от длины волны. $\gamma \leq 1$ -- нормальная (запаздывающая) дисперсия, $\gamma < 1$ -- аномальная (опережающая) диперсия.
+
+\textbf{Информация из лекций аристовой}
+
+Немного другой подход -- начать с рассмотрения непрерывной задачи и ее решения.
+
+Рассмотрим решение
+
+\begin{equation*}
+u(x,t) = e^{\lambda t} e^{ikx}
+\end{equation*}
+Тут $lambda$ то же что $\omega$ у Головизнина. Подставим в уравнение переноса:
+\begin{equation*}
+\lambda e^{\lambda t} e^{ikx} + ick~e^{\lambda t} e^{ikx} = 0
+\end{equation*}
+Делим на $e^{\lambda t} e^{ikx}$,
+\begin{equation*}
+\lambda = -ick
+\end{equation*}
+Последнее выражение называют \textbf{точным дисперсионным соотношением}.
+Тогда,
+\begin{equation*}
+u(x,t) = e^{-ick t} e^{ikx} = e^{ik(x-ct)}
+\end{equation*}
+Выводы:
+\begin{enumerate}
+\item $\lambda$ чисто мнимое -- амлпитуда волны не меняется
+\item Все гармоники движутся с одинаковой скоростью $c$.
+\end{enumerate}
+
+\subsection{Два возможных типа искажений дисперсионного соотношения для точного уравнения переноса, которые могут возникать в разностной схеме}
+
+Возможны  два типа искажений решения:
+\begin{enumerate}
+\item $\lambda = -ikc + \Delta \lambda$, для устойчивых схем $\Delta \lambda \in \mathbb{R}_{-}$ (это эквивалентно тому, что модуль перехода меньше 1) -- амплитуды отдельных Фурье-гармоник затухают. Это назывется \textbf{диссипацией}. 
+
+\item $\lambda = -ik(c + \Delta c)$, $\Delta c = \Delta
+c(\sigma, kh, \dots)$ (т.е. $\Delta c$ зависит от параметров схемы) -- каждая Фурье-гармоника начинается двигаться с собственной скоростью. Это называется \textbf{дисперсией}.
+\end{enumerate}
+
+Дисперсия возможна \textbf{запаздывающая} (нормальная) при $\Delta c < 0 $ и \textbf{опережающая} (аномальная) при $\Delta c > 0$.
+
+\begin{figure}[h!]
+\includegraphics[width = 0.8\textwidth]{1.5_pic1.jpg}
+\end{figure}
+
+\textbf{ДИСКЛЕЙМЕР}
+\textit{Нижепреведенные выкладки были переписаны из лекций. Как они были получены -- непонятно совершенно. Такое ощущение, что это просто какие-то математикообразные записи подогнанные под ответ}
+
+\subsection{Диссипативная ошибка разностной схемы на примере схемы <<явный левый уголок>>}
+Подставляя бегущую волну в схему <<явный левый уголок>>,  получим:
+\begin{equation*}
+e^{\lambda \tau} = 1 - \sigma(1-e^{-ikh})
+\end{equation*}
+\begin{equation*}
+\lambda = \frac{1}{\tau} \ln (1-\sigma (1-\sigma (1-e^{-ikh}))
+\end{equation*}
+
+Чтобы воспользоваться разложением логарифма в ряд Маклорена $\ln(1+z) = z - z^2/2 + z^3/3 - z^4/4 + z^5/5 + \dots$ рассмотрим длинноволновые гармоники: $kh \ll 1$.
+Раскладываем $e^{-ikh}$ в ряд Тейлора в окрестности $kh=0$:
+$e^{-ikh} = 1 - ikh - \frac{1}{2}k^2h^2 + \frac{1}{6} ik^3h^3 + \dots$
+\begin{align*}
+1-\sigma(1-e^{-ikh}) &= 1 - \sigma( ikh + \frac{1}{2}k^2h^2 - \frac{1}{6} ik^3h^3 + \dots ) \\
+&= 1 - i \frac{c \tau}{h} kh - \frac{1}{2} \frac{c \tau}{h}k^2h^2 + \frac{1}{6} \frac{c \tau}{h} ik^3h^3 + \dots 
+\end{align*}
+
+\begin{align*}
+\frac{1}{\tau} \ln (1 - \sigma (1-e^{-ikh})) 
+&= \frac{1}{\tau} \ln \left(1 - ic\tau k - \frac{1}{2}c\tau k^2h + \frac{1}{6} ic \tau k^3 h^3 + \cdots\right) \\
+&= | \text{Раскладываем логарифм в ряд Маклорена} | \\
+&= \frac{1}{\tau} \left( \underbrace{ -ick\tau - \frac{1}{2} c \tau k^2h + \cdots }_{z} \underbrace{ -\frac{1}{2} \left(-ic\tau k-\frac{1}{2}c\tau k^2h\right)^2 }_{-\frac{z^2}{2}} \right) \\
+&= - ick - \frac{1}{2}ck^2h + \frac{1}{2} c^2\tau k^2 \\
+&= \underbrace{-ick}_{\text{точное дисперсионное}} - \frac{ck^2h}{2}\left(1-\frac{c \tau}{h}\right) + \cdots
+\end{align*}
+
+Второй член и определяет диссипацию: необходимо, чтобы он был меньше или равен 0.
+\begin{equation*}
+\begin{cases}
+& c>0 \\
+& 1 - \sigma > 0
+\end{cases}
+\end{equation*}
+или
+\begin{equation*}
+\begin{cases}
+& c<0 \\
+& 1 - \sigma < 0
+\end{cases}
+\end{equation*}
+Откуда $0 \leq \sigma \leq 1$.
+
+\subsection{Дисперсионная ошибка разностной схемы на примере схемы Лакса-Вендроффа}
+
+Для схемы Лакса-Вендроффа,
+\begin{equation*}
+\lambda = \frac{1}{\tau} \ln (1 - i \sigma \sin (kh) - 2\sigma^2 \sin^2 (\frac{kh}{2} )
+\end{equation*}
+Рассматриваем $kh \ll 1$. Тут опять разложение логарифма и синуса в Маклорена.
+\begin{equation*}
+\lambda = - i kc + \underbrace{ ikc \frac{k^2h^2}{6} (1-\sigma^2) }_{-\Delta c  ~~ \text{всегда отрицательно в обл. устойчивости}} - kc^2 \sigma \frac{k^4h^3}{8} (\sigma^2-1)
+\end{equation*}
+Следовательно, дисперсия запаздывающая.
+
+\end{document}
