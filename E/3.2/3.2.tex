@@ -1,0 +1,196 @@
+\documentclass[../../main/main.tex]{subfiles}
+
+\begin{document}
+\section{Метод итераций источника (Source iteration) по рассеянию}
+
+Рассмотрим стационарное уравнение переноса излучения/нейтронов:
+
+\begin{align*}
+& \underbrace{ \mu \frac{\partial \psi (x, \mu) }{\partial x} }_
+{\text{изменение } \psi \text{ в пучке}}
++ \underbrace{ (\Sigma_a(x) + \Sigma_s(x)) \psi(x,\mu) }_
+{\text{выбитые из пучка за счет поглощения } (\Sigma_a) \text{ и рассеяния } (\Sigma_s) } 
+= \\
+& \frac{\Sigma_s(x)}{2}
+\underbrace{ \int_{-1}^{1} \psi (x, \mu ') d \mu '}_{\text{интеграл рассеяния}}
++ \underbrace{Q(x)/2}_{\text{внешний источник}}
+\end{align*}
+
+Для наглядности без пояснений:
+
+\begin{equation*}
+\mu \frac{\partial \psi (x, \mu)}{\partial x} 
++ (\Sigma_a(x) + \Sigma_s(x)) \psi(x,\mu) 
+= \frac{\Sigma_s(x)}{2} \int_{-1}^{1} \psi (x, \mu ') \, d\mu'
++ \frac{Q(x)}{2}
+\end{equation*}
+Ставятся граничные условия:
+
+\begin{align*}
+\mu > 0 &: \psi (0,\mu) = \psi^{in} = \psi^0 ~~ \text{-- изотропное излучение} \\
+\mu < 0 &: \psi (X,\mu) = \psi (X,-\mu) ~~ \text{условие зеркального отражения}
+\end{align*}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width = 0.4\textwidth]{3.2_pic1.png}
+\end{figure}
+
+\subsubsection*{Метод итераций источника}
+
+Рассматривается уравнение:
+
+\begin{equation*}
+\mu \frac{\partial \psi (x, \mu)}{\partial x} 
++ \Sigma_t (x) \psi(x,\mu) 
+= \frac{\Sigma_s(x)}{2} \int_{-1}^{1} \psi (x, \mu ') \, d\mu'
++ \frac{Q(x)}{2}
+\end{equation*}
+где $\Sigma_t (x) = (\Sigma_a(x) + \Sigma_s(x)) $
+С граничными условиями:
+
+\begin{align*}
+\mu > 0 &: \psi (0,\mu) = \psi^{in} (0,\mu) \\
+\mu < 0 &: \psi (X,\mu) = \psi (X,-\mu) 
+\end{align*}
+
+И начальным приближением:
+
+\begin{equation*}
+\psi^{(0)}(x,\mu)
+\end{equation*}
+
+Метод итераций источника:
+
+\begin{equation*}
+\mu \frac{\partial \psi^{(l+1)}(x, \mu)}{\partial x} + \Sigma_t(x) \psi^{(l+1)}(x,\mu) = \frac{\Sigma_s(x)}{2} \int_{-1}^{1} \psi^{(l)} (x, \mu') d\mu' + \frac{Q(x)}{2}
+\end{equation*}
+
+Интеграл приближается некоторым образом в виде линейной комбинации:
+
+\begin{equation*}
+\int_{-1}^{1} \psi^{(l)} (x, \mu') d\mu' = \sum_{k} c_k \psi(\mu_k)
+\end{equation*}
+
+Откуда брать веса линейной комбинации?
+\begin{enumerate}
+\item
+\begin{itemize}
+\item метод прямоугольников 
+\item метод трапеций 
+\item метод Симпсона
+\end{itemize}
+
+\item 
+Квадратуры Гаусса -- $S_N$ приближение для интегрирования по углам, $N$ (число узлов квадратуры) !чётно!. Квадратура по $N$ точка обеспечивает точность на полиномах степени до $2N-1$.
+\end{enumerate}
+
+Таким образом, на каждом шаге некоторым образом численно вычисляется интеграл, после чего интегрируется ОДУ -- по возможности аналитически, либо численно.
+
+
+
+\subsection{Отношение рассеяния}
+
+\textbf{Отношением рассеяния} называется величина
+\begin{equation*}
+C = \frac{\Sigma_s}{\Sigma_t}
+\end{equation*}
+для неразмножающих сред $0 < C \leq 1$.
+Эта величина потребуется далее в анализе сходимости SI.
+
+\subsection{Фурье-анализ скорости сходимости SI на примере уравнения переноса в плоскопараллельной геометрии для непрерывного стационарного уравнения переноса и зависимость этой скорости от отношения рассеяния}
+
+Рассмотрим неразмножающую среду: $\Sigma_s(x) \leq \Sigma_t(x)$. Для анализа сходимость рассмотрим разность точного дифференциального уравнения и итерационного приближения:
+
+\begin{equation*}
+-
+\begin{cases}
+
+\mu \frac{\partial \psi (x, \mu)}{\partial x} 
++ \Sigma_t (x) \psi(x,\mu) 
+= \frac{\Sigma_s(x)}{2} \int_{-1}^{1} \psi (x, \mu ') \, d\mu'
++ \frac{Q(x)}{2} \\
+
+\mu \frac{\partial \psi^{(l+1)}(x, \mu)}{\partial x} + \Sigma_t(x) \psi^{(l+1)}(x,\mu) = \frac{\Sigma_s(x)}{2} \int_{-1}^{1} \psi^{(l)} (x, \mu') d\mu' + \frac{Q(x)}{2}
+
+\end{cases}
+\end{equation*}
+
+Введем \textbf{итерационную погрешность}: $f^{(l)})(x,\mu) = \psi (x,\mu) - \psi^{(l))} (x, \mu)$.
+Тогда результат вычитания:
+\begin{equation*}
+\mu \frac{\partial f^{(l+1)})(x,\mu) }{\partial x} 
++ \Sigma_t (x) f^{(l+1)})(x,\mu)
+= \frac{\Sigma_s(x)}{2} \int_{-1}^{1} f^{(l)})(x,\mu') \, d\mu'
++ \frac{Q(x)}{2} \\
+\end{equation*}
+
+Разложим $f(x, \mu)$ в интеграл Фурье:
+\begin{equation*}
+f^{(l)} (x, \mu) = \int_{\-infty}^{\infty} A^{(l)} (\lambda, \mu) e^{i \lambda x \Sigma_t} d\lambda
+\end{equation*}
+Подставляем в полученное уравнение.
+
+\begin{align*}
+& \int_{-\infty}^{\infty} A^{(l+1)}(\lambda, \mu) \mu i \lambda \Sigma_t e^{i \lambda x \Sigma_t} d\lambda
++
+\Sigma_t(x) \int_{-\infty}^{\infty} A^{(l+1)} (\lambda, \mu) e^{i \lambda x \Sigma_t}  d\lambda  \\
+& =
+\frac{\Sigma_s(x)}{2} \int_{-1}^{1} d \mu' \int_{-infty}^{\infty} A^{(l)} (\lambda, \mu') e^{i \lambda x \Sigma_t}  d \lambda
+\end{align*}
+Приравнивания подынтегральные выражения:
+\begin{equation*}
+A^{(l+1)} (\lambda, \mu) (1+ i \lambda \mu) \Sigma_t = \frac{\Sigma_s}{2} \int_{-1}^{1} A^{(l)} (\lambda, \mu')d\mu'
+\end{equation*}
+
+\begin{equation*}
+A^{(l+1)} (\lambda, \mu) = \frac{C}{2} \frac{1}{1+i \lambda \mu} \int_{-1}^{1} A^{(l)} (\lambda, \mu') d \mu'
+\end{equation*}
+Интегрируем обе части:
+
+\begin{equation*}
+\int_{-1}^{1} A^{(l+1)} (\lambda, \mu)  d\mu = \frac{C}{2} \int_{-1}^{1} \frac{d \mu}{1+i\lambda \mu} \int_{-1}^{1} A^{(l)} (\lambda, \mu') d\mu'
+\end{equation*}
+
+\begin{align*}
+& \int_{-1}^{1} \frac{d \mu}{1+i\lambda \mu} = \int_{-1}^{1} \frac{(1 + i \lambda \mu)}{(1 - i \lambda \mu)(1 + i \lambda \mu)} = \int_{-1}^{1} \frac{ (1 - i \lambda \mu)  d\mu}{(1 + \lambda^2 \mu^2)} = \frac{1}{\lambda} \int_{-1}^{1} \frac{d (\lambda \mu )}{1 + \lambda^2 \mu^2} \\
+&=|\text{Используем табличный интеграл: } \int \frac{dx}{a^2+x^2} = \frac{1}{a} \operatorname{arctg} (\frac{x}{a}) + const | \\
+& = \frac{1}{\lambda} \operatorname{arctg} (\lambda \mu) \Big|_{-1}^{1} =
+\frac{2}{\lambda} \operatorname{arctg} \lambda
+\end{align*}
+
+Теперь, возвращаясь к исходному интегралу,
+
+\begin{equation*}
+\int_{-1}^{1} A^{(l+1)} (\lambda, \mu)  d\mu = \frac{C}{\lambda} \operatorname{arctg} \lambda \int_{-1}^{1} A^{(l)} (\lambda, \mu) d\mu
+\end{equation*}
+Далее,
+\begin{equation*}
+\| f^{(l+1)} \| \leq \max_{\lambda} \int_{-1}^{1} A^{(l+1)} (\lambda, \mu) d\mu \|f^{(l)}\|
+\end{equation*}
+Здесь $\max_{\lambda} \int_{-1}^{1} A^{(l+1)} (\lambda, \mu) d\mu = \sigma_{SI}$  -- \textbf{спектральный радиус сходимости метода простой итерации источника}.
+Используя полученный выше арктангенс, получаем:
+\begin{equation*}
+\sigma_{SI} = \max_{\lambda} \left[ \frac{C}{\lambda}  \operatorname{arctg} \lambda \right]
+\end{equation*}
+
+Отсюда ясно, что если $C$ мало, т.е. $\Sigma_S \ll \Sigma_t$, то итерации источника сходятся быстро.
+
+В чисто рассеивающей среде: $\Sigma_t = \Sigma_s$, $C=1$.
+\begin{equation*}
+A^{(l+1)} (\lambda, \mu) = \omega^{l} \frac{1}{1+i \lambda \mu } \cdot \frac{C}{2} \int_{-1}{1} A^{(l)} (\lambda, \mu' d \mu'
+\end{equation*}
+$\omega^l = \frac{C}{\lambda}  \operatorname{arctg} \lambda$.
+
+\begin{enumerate}
+\item $\max \frac{C}{\lambda}  \operatorname{arctg} \lambda $ достигается при $\lambda \approx 0$, для  длинноволных гармоник связи между далекими точками, градиенты малы.
+\item Множитель $\frac{1}{1+i \lambda \mu} \approx 1 - i \lambda \mu$. Отсюда -- наихудшая сходимость и для слабой угловой зависимости.
+\item Каждая Фурье-гармоника независима, следовательно можем смотреть одну при фиксированном $\lambda$.
+\end{enumerate}
+
+Метод итераций источника не сходится либо сходится медленно при отношении рассеивания стремящемся к 1. При этом наихудшая сходимость длинноволновых гармоник и слабых угловых зависимостей (малый градиент). Следовательно, метод итераций источника необходимо ускорять.
+
+
+
+
+\end{document}
