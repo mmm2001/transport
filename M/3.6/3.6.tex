@@ -1,0 +1,140 @@
+\documentclass[../../main/main.tex]{subfiles}
+
+\begin{document}
+
+\section{Мультипликативные методы ускорения сходимости итераций по рассеянию}
+
+\subsection{Метод квазидиффузии Гольдина В.Я.}
+
+Метод квазидиффузии (КД), предложенный В.Я. Гольдиным, представляет собой итерационный подход 
+к решению стационарного уравнения переноса частиц:
+\[
+\mu \frac{\partial \Psi(x,\mu)}{\partial x} + \Sigma_t(x) \Psi(x,\mu) = \frac{\Sigma_s(x)}{2} \Phi(x) + \frac{Q(x)}{2},
+\]
+$$ \mu>0 \quad \psi(0, \mu)=\psi^{in}=\psi^0  $$
+$$ \mu<0 \quad \psi(X,\mu)=\psi(X,-\mu)$$
+
+где $\Psi(x,\mu)$ — угловое распределение потока нейтронов, $\Phi(x) = \int_{-1}^{1} \Psi(x,\mu)\, d\mu$ — скалярный поток, 
+а $J(x) = \int_{-1}^{1} \mu \Psi(x,\mu)\, d\mu$ — векторный поток.
+
+
+Проинтегрируем исходное уравнение с весом 1 по $\mu$ на [-1,1]:
+
+\begin{align*}
+\pderiv{}{x} \int_{-1}^{1}\mu \Psi(x, \mu)d\mu + \Sigma_t(x)\int_{-1}^{1}\psi(x,\mu)d\mu =
+\frac{\Sigma_s(x)}{2}\Phi(x)\int_{-1}^{1}d\mu+\frac{Q(x)}{2}\int_{-1}^{1}d\mu
+\end{align*}
+
+Получаем первое уравнение квазидиффузии:
+\[
+\pderiv{J(x)}{x} + \Sigma_a(x)\Phi(x)=Q(x)
+\]
+
+Проинтегрируем исходное уравнение с весом $\mu$ по $\mu$ на $[-1,1]$:
+\begin{align*}
+\frac{d}{dx} \int_{-1}^{1} \mu^2 \Psi(x, \mu) \, d\mu &+ \Sigma_t(x) \int_{-1}^{1} \mu \Psi(x, \mu) \, d\mu \\
+&= \frac{\Sigma_s(x)}{2} \Phi(x) \int_{-1}^{1} \mu \, d\mu + \frac{Q(x)}{2} \int_{-1}^{1} \mu \, d\mu
+\end{align*}
+
+Учитывая, что $\int_{-1}^{1} \mu \, d\mu = 0$, получаем второе уравнение квазидиффузии:
+\[
+\pderiv{}{x}\bigl(D(x)\Phi(x)\bigr) + \Sigma_t(x) J(x) = 0
+\]
+где $J(x) = \int_{-1}^{1} \mu \Psi(x, \mu) \, d\mu$ --- ток нейтронов.
+
+Основная идея метода состоит в замене исходного интегро-дифференциального уравнения 
+системой двух связанных дифференциальных уравнений:
+\[
+\begin{cases}
+\ \displaystyle \pderiv{J(x)}{x} + \Sigma_a(x) \Phi(x) = Q(x) \\[8pt]
+\ \displaystyle \pderiv{}{x}\bigl(D(x)\Phi(x)\bigr) + \Sigma_t(x) J(x) = 0
+\end{cases}
+\]
+
+\[
+D(x) = \frac{\int_{-1}^{1} \mu^2 \Psi(x,\mu)\, d\mu}{\int_{-1}^{1} \Psi(x,\mu)\, d\mu}
+\]
+--- \textit{фактор Эддингтона}, играющий роль коэффициента квазидиффузии.
+Для $P_1$ приближения коэффциент равен $\frac 13$ \\
+
+При этом условии имеем следующую систему квазидиффузии:
+
+
+\[
+\begin{cases}
+\ \displaystyle \pderiv{J(x)}{x} + \Sigma_a(x) \Phi(x) = Q(x) \\[8pt]
+\ \displaystyle \pderiv{}{x} \Bigl(\frac{1}{\Sigma_t} \pderiv{D(x)\Phi(x)}{x}\Bigr)+
+        \Sigma_a(x) \Phi(x)=Q(x)
+\end{cases}
+\] 
+
+\begin{itemize}
+    \item \textbf{Граничные условия на левой границе}:
+    \[
+    \alpha = \frac{J(0) - J^{\mathrm{in}}}{\Phi(0) - \Phi^{\mathrm{in}}},
+    \]
+    где 
+    \[
+    \Phi^{\mathrm{in}} = \int_{0}^{1} \Psi^{\mathrm{in}}(\mu) \, d\mu,
+    \quad
+    J^{\mathrm{in}} = T^{\mathrm{in}} = \int_{0}^{1} \mu \Psi^{\mathrm{in}}(\mu) \, d\mu,
+    \]
+    а $\Psi^{\mathrm{in}}(\mu)$ задаёт входящий поток при $x=0$.
+
+    \item \textbf{На правой границе} принимается условие свободного выхода:
+    \[
+    J(X) = 0.
+    \]
+\end{itemize}
+
+Если известны заданы начальные приближения для тока и скалярного потока то по $P_1$ приближение
+для коэффциентов $D^{(0)}(x)=\frac 13 \quad \alpha^{(0)}(0)=- \frac 12 $\\
+
+
+
+
+\subsection{Алгоритм метода квазидиффузии}
+Итерационный процесс метода квазидиффузии состоит из следующих шагов:
+\begin{enumerate}
+    \item \textit{LO-шаг} Решаются уравнения квазидиффузии c граничными условиями:
+\[
+\begin{cases}
+\ \displaystyle \pderiv{J(x)^{l+\frac 12}}{x} + \Sigma_a(x) \Phi(x)^{l+\frac 12} = Q(x) \\[8pt]
+\ \displaystyle \pderiv{}{x}\bigl(D^{l}(x)\Phi^{l+\frac 12}(x)\bigr) + \Sigma_t(x) J^{l+\frac 12}(x) = 0
+\end{cases}
+\]
+получаем значения для скалярного потока и тока на полуслое
+
+    \item \textit{HO-шаг} Решение уравнения переноса с исходными граничными условиями:
+\[
+\mu \frac{\partial \Psi^{l+1}(x,\mu)}{\partial x} + \Sigma_t(x) \Psi^{l+1}(x,\mu) = \frac{\Sigma_s(x)}{2} \Phi^{l+\frac 12}(x) + \frac{Q(x)}{2},
+\]
+Из решения на этом этапе находим значения коэффицентов $D, \quad \alpha$ на новом слое 
+\end{enumerate}
+
+
+
+Существуют обобщения метода квазидиффузии, такие как \textit{WA-метод} (Weighted-Alpha), 
+в котором вместо одного коэффициента $\alpha$ используются весовые моменты с показателем $\alpha \geq 0$:
+\[
+A_{\pm}^{(l+1/2)}(x) = (\alpha+1) \frac{\int_{0}^{1} \mu^{\alpha} \Psi_{\pm}^{(l+1/2)}(x,\mu)\, d\mu}
+{\int_{0}^{1} \Psi_{\pm}^{(l+1/2)}(x,\mu)\, d\mu},
+\]
+\[
+B_{\pm}^{(l+1/2)}(x) = (\alpha) \frac{\int_{0}^{1} \mu^{\alpha+1} \Psi_{\pm}^{(l+1/2)}(x,\mu)\, d\mu}
+{\int_{0}^{1} \Psi_{\pm}^{(l+1/2)}(x,\mu)\, d\mu}.
+\]
+Оптимизация параметра $\alpha$ (например, $\alpha \approx 0{,}366$) позволяет существенно улучшить 
+скорость сходимости по сравнению с классическим методом КД.
+
+Метод квазидиффузии Гольдина показывает высокую эффективность при решении задач переноса 
+с сильным рассеянием и является одним из наиболее мощных мультипликативных методов 
+ускорения итераций по рассеянию.
+
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\linewidth]{3.6_pic1.png}
+\end{figure}
+
+\end{document}
