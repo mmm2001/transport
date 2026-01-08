@@ -1,0 +1,390 @@
+\documentclass[../../main.tex]{subfiles}
+
+\begin{document}
+\section{Присоединенные функции Лежандра. Метод сферических гармоник в задачах переноса нейтронов с рассеянием.}
+
+\subsection{Полиномы Лежандра}
+
+При наличии осевой симметрии угловая зависимость определяется направляющим
+косинусом
+\[
+\mu=\cos\theta.
+\]
+
+Полиномы Лежандра $P_n(\mu)$ определяются как решения задачи Штурма–Лиувилля:
+\[
+\frac{d}{d\mu}\left[(1-\mu^2)\frac{dP_n}{d\mu}\right]
++
+n(n+1)P_n(\mu)=0.
+\]
+
+Полином Лежандра степени 
+$n \in \mathbb{Z}$ можно представить через формулу Родрига в виде
+
+\[
+P_n(\mu) = \frac{1}{2^n n!} \frac{d^n\left[(\mu^2 - 1)^n\right]}{d\mu^n}.
+\]
+
+Они также могут быть вычислены по рекуррентной формуле (при $n \ge 1$):
+\[
+P_{n+1}(\mu) = \frac{2n+1}{n+1} \mu P_n (\mu) - \frac{n}{n+1} P_{n-1}(\mu).
+\]
+
+Причём первые две функции имеют вид:
+\[
+P_0 (\mu) = 1, \qquad P_1(\mu) = \mu.
+\]
+\textbf{Свойства полиномов Лежандра:}
+\begin{itemize}
+  \item ортогональность:
+  \[
+  \int_{-1}^{1}P_n(\mu)P_{n'}(\mu)\,d\mu
+  =
+  \frac{2}{2n+1}\delta_{nn'};
+  \]
+  \item нормировка: $P_n(1)=1$;
+  \item чётность: $P_n(-\mu)=(-1)^nP_n(\mu)$;
+  \item полнота в пространстве $L^2[-1,1]$.
+\end{itemize}
+
+Для полиномов Лежандра справедливо соотношение ортогональности
+на сфере радиуса $R$:
+\[
+\int_R\int_{4\pi }
+P_n(\cos\theta)\,P_k(\cos\theta)\,d\Omega
+=
+\begin{cases}
+\dfrac{4\pi R^2}{2n+1}, & n = k, \\
+0, & n \neq k,
+\end{cases}
+\]
+где элемент телесного угла равен
+\[
+d\Omega = \sin\theta\,d\theta\,d\varphi.
+\]
+
+\textbf{Теорема (о разложении по полиномам Лежандра).}
+Любая функция $f(\mu)\in L^2[-1,1]$ допускает разложение
+\[
+f(\mu)=\sum_{n=0}^{\infty}a_nP_n(\mu),
+\quad
+a_n=\frac{2n+1}{2}\int_{-1}^{1}f(\mu)P_n(\mu)\,d\mu.
+\]
+
+\subsection{Присоединённые функции Лежандра}
+
+Для общего трёхмерного случая при $\mu \in [-1, 1]$ вводятся присоединённые функции Лежандра:
+\[
+P_n^m(\mu)
+=
+(1-\mu^2)^{m/2}\frac{d^m}{d\mu^m}P_n(\mu),
+\quad m=0,1,\dots,n,
+\]
+\[
+P_n^m(\mu) = 0, \qquad m > n.
+\]
+
+Они являются решениями уравнения:
+\[
+\frac{d}{d\mu}\left[(1-\mu^2)\frac{dP_n^m}{d\mu}\right]
++
+\left[n(n+1)-\frac{m^2}{1-\mu^2}\right]P_n^m(\mu)=0.
+\]
+
+\textbf{Свойства присоединённых функций Лежандра:}
+\begin{itemize}
+  \item ортогональность по $\mu$ при фиксированном $m$;
+  \item $P_l^0(\mu)=P_l(\mu)$;
+  \item при фиксированном $m$
+  \[
+  \int_{-1}^{1} P_n^m (\mu) P_{n'}^m (\mu) d \mu = \frac{2}{2n+1}\frac{(n+m)!}{(n-m)!} \delta_{nn'}.
+  \]
+\end{itemize}
+
+Для них справедливо рекурретное соотношение:
+\[
+P_{n+1}^{m} (\mu) = \frac{2n+1}{n-m+1} \mu P_n^{m} (\mu) - \frac{n+m}{n-m+1} P_{n-1}^m (\mu).
+\]
+
+\subsection{Сферические гармоники}
+
+Сферические гармоники определяются формулами
+\[
+Y_n^{(m)}(\theta,\varphi)
+=
+Y_n^{(m)}(\mu,\varphi)
+=
+\begin{cases}
+P_n^{m}(\mu)\sin(m\varphi), & m>0, \\[6pt]
+P_n^{|m|}(\mu)\cos(|m|\varphi), & m\le 0.
+\end{cases}
+\]
+
+Область определения:
+\[
+-1 \le \mu \le 1,
+\qquad
+0 \le \varphi \le 2\pi.
+\]
+
+Сферические гармоники образуют полную ортогональную систему на сфере:
+\[
+\int_{0}^{2\pi}\!\!\int_{-1}^{1}
+Y_{n_1}^{(m_1)}(\mu,\varphi)\,
+Y_{n_2}^{(m_2)}(\mu,\varphi)
+\,d\mu\,d\varphi
+=
+\begin{cases}
+\dfrac{2\pi(2-\delta_{m0})(n+|m|)!}
+{(2n+1)(n-|m|)!},
+& n_1=n_2,\; m_1=m_2, \\[10pt]
+0, & \text{иначе}.
+\end{cases}
+\]
+
+Здесь символ Кронекера задаётся как
+\[
+\delta_{m0} =
+\begin{cases}
+1, & m=0,\\
+0, & m\neq 0.
+\end{cases}
+\]
+
+Элемент телесного угла может быть записан в эквивалентных формах:
+\[
+d\mathbf{\Omega}
+=
+\sin\theta\,d\theta\,d\varphi
+=
+d(\cos\theta)\,d\varphi
+=
+d\mu\,d\varphi.
+\]
+
+Любая достаточно гладкая функция направления
+$f(\mathbf{\Omega})$ может быть разложена в ряд по сферическим гармоникам:
+\[
+f(\mathbf{\Omega})
+=
+\sum_{n=0}^{\infty}
+\sum_{m=-n}^{n}
+A_{nm}\,
+Y_n^{(m)}(\mu,\varphi).
+\]
+
+Коэффициенты разложения определяются формулой
+\[
+A_{nm}
+=
+\frac{1}{N_{nm}}
+\int_{0}^{2\pi}\!\!\int_{-1}^{1}
+f(\Omega)\,
+Y_n^{(m)}(\mu,\varphi)
+\,d\mu\,d\varphi.
+\]
+
+Нормировочный множитель имеет вид
+\[
+N_{nm}
+=
+\frac{2\pi(2-\delta_{m0})}{2n+1}
+\frac{(n+|m|)!}{(n-|m|)!}.
+\]
+
+Разложение функции по сферическим гармоникам может быть записано
+в компактной нормированной форме:
+\[
+f(\mathbf{\Omega})
+=
+\sum_{n=0}^{\infty}
+\sum_{m=-n}^{n}
+\frac{2n+1}{2\pi(2-\delta_{m0})}
+\frac{(n-|m|)!}{(n+|m|)!}
+C_{nm}
+Y_n^{(m)}(\mu,\varphi), где
+\]
+
+\[
+C_{nm} = \int_{0}^{2 \pi}d\varphi \int_{-1}^{1} f(\mathbf{\Omega}) Y_n^{(m)} (\mu, \varphi) d \mu.
+\]
+
+Если функция $f(\Omega)$ не зависит от азимутального угла $\varphi$,
+то разложение упрощается и содержит только полиномы Лежандра:
+\[
+f(\mu)
+=
+\sum_{n=0}^{\infty}
+\frac{2n+1}{2}
+c_n P_n(\mu),
+\]
+где коэффициенты находятся по формуле
+\[
+c_n
+=
+\int_{-1}^{1}
+f(\mu)P_n(\mu)\,d\mu.
+\]
+
+\subsection{Нестационарное уравнение переноса}
+
+Общее уравнение переноса имеет вид:
+\[
+\frac{1}{v}
+\frac{\partial \Psi(\mathbf{r},t,\mathbf{\Omega},E)}{\partial t}
++
+\mathbf{\Omega}\cdot\nabla
+\Psi(\mathbf{r},t,\mathbf{\Omega},E)
++
+\Sigma_t(\mathbf{r},E)\Psi(\mathbf{r},t,\mathbf{\Omega},E)
+=
+\]
+\[
+=
+\frac{\Sigma_s(\mathbf{r},E)}{4\pi}
+\int_{4\pi}
+\omega(\mu_0)
+\Psi(\mathbf{r},t,\mathbf{\Omega'},E)\,d\mathbf{\Omega'}
++
+\frac{Q(\mathbf{r})}{4\pi}.
+\]
+
+Угловую плотность потока можно представить в виде ряда:
+\[
+\Psi(\mathbf{r},t,\mathbf{\Omega},E)
+=
+\sum_{n=0}^{\infty}
+\sum_{m=-n}^{n}
+\frac{2n+1}{2\pi(1+\delta_{m0})}
+\frac{(n-|m|)!}{(n+|m|)!}
+\Psi_{nm}(\mathbf{r},t,E)
+Y_n^{(m)}(\mu,\varphi).
+\]
+
+Рассматривается одномерное стационарное уравнение:
+\[
+\mu \frac{\partial \Psi(z,\mu)}{\partial z}
++
+\Sigma_t(z)\Psi(z,\mu)
+=
+\frac{\Sigma_s(z)}{2}
+\int_{-1}^{1}
+\omega(\mu_0)\Psi(z,\mu')\,d\mu'
++
+\frac{Q(z)}{2}.
+\]
+
+Интегрирование по $\varphi$ выполнено, так как задача осесимметрична. Искомая функция представляется в виде полиномов Лежандра:
+\[
+\Psi(z,\mu)
+=
+\frac{1}{2}\Psi_0(z)
++
+\frac{3}{2}\mu\Psi_1(z)
++
+\frac{5}{2}\frac{3\mu^2-1}{2}\Psi_2(z)
++
+\ldots + \frac{2n + 1}{2} P_n (\mu) \Psi_n (\mu).
+\]
+
+Индикатриса рассеяния $\omega(\mu_0)$ раскладывается по полиномам Лежандра:
+\[
+\omega(\mu_0)
+=
+\sum_{k=0}^{\infty}
+\omega_k
+\frac{2k+1}{2}
+P_k(\mu_0) = \sum_{k=0}^{\infty} \omega_k \frac{2k+1}{2} P_k (\mu) P_k (\mu'),
+\]
+где $\mu_0 = \Omega\cdot\Omega'$ — косинус угла рассеяния.
+
+Уравнение умножается на $P_k(\mu)$ и интегрируется по $\mu\in[-1,1]$.
+Используется тождество:
+\[
+\mu P_k(\mu)
+=
+\frac{k+1}{2k+1}P_{k+1}(\mu)
++
+\frac{k}{2k+1}P_{k-1}(\mu).
+\]
+
+\textbf{Теорема сложения для полиномов Лежандра.}
+\[
+P_n(\mathbf{\Omega}\cdot\mathbf{\Omega'}) = P_n (\mu) P_n(\mu') + 2\sum_{m=1}^n \frac{(n-m)!}{(n+m)!} P_n^{(m)} (\mu) P_n^{(m)} (\mu') \cos{m} (\varphi - \varphi')
+\]
+
+В результате получается система:
+\[
+k\frac{d\Psi_{k-1}}{dz}
++
+(k+2)\frac{d\Psi_{k+1}}{dz}
++
+(2k+1)\Sigma_k\Psi_k
+=
+(2k+1)Q_k,
+\]
+где
+\[
+\Sigma_k = \Sigma_t - \Sigma_s\omega_k, \qquad \omega_k - \text{\textit{k}-ый член разложения по полиномам Лежандра.}
+\]
+
+\subsection{Приближение $P_1$}
+
+В приближении $P_1$:
+\[
+\Psi(z,\mu)
+=
+\frac{1}{2}\Psi_0(z)
++
+\frac{3}{2}\mu\Psi_1(z).
+\]
+
+Система уравнений принимает вид:
+\[
+\begin{cases}
+\dfrac{d\Psi_1}{dz} + \Sigma_0\Psi_0 = Q_0, \\[0.5cm]
+\dfrac{d\Psi_0}{dz} + 3\Sigma_1\Psi_1 = 0.
+\end{cases}
+\]
+
+Отсюда получается диффузионное уравнение:
+\[
+-\frac{d}{dz}
+\left(
+D(z)\frac{d\Psi_0}{dz}
+\right)
++
+\Sigma_0\Psi_0
+=
+Q_0,
+\qquad
+D(z)=\frac{1}{3\Sigma_1(z)}.
+\]
+
+\subsection{Приближение $P_2$}
+
+В приближении $P_2$:
+\[
+\Psi(z,\mu)
+=
+\frac{1}{2}\Psi_0
++
+\frac{3}{2}\mu\Psi_1
++
+\frac{5}{2}\frac{3\mu^2-1}{2}\Psi_2.
+\]
+
+Получается система:
+\[
+\begin{cases}
+\dfrac{d\Psi_1}{dz} + \Sigma_0\Psi_0 = Q_0, \\[0.5cm]
+\dfrac{d\Psi_0}{dz} + 2\dfrac{d\Psi_2}{dz} + 3\Sigma_1\Psi_1 = 0, \\[0.5cm]
+2\dfrac{d\Psi_1}{dz} + 5\Sigma_2\Psi_2 = 0.
+\end{cases}
+\]
+
+При увеличении порядка $P_N$ возрастает точность учёта
+анизотропии углового распределения, однако увеличивается
+размерность системы уравнений.
+
+\end{document}
