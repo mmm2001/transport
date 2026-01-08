@@ -1,0 +1,57 @@
+\documentclass[../../main/main.tex]{subfiles} 
+
+\begin{document}
+\section{HOLO алгоритмы решения уравнений переноса}
+
+\subsection*{Основная концепция}
+HOLO (Higher order - Low order) алгоритмы --- это семейство итерационных методов для численного решения уравнений переноса частиц, которые комбинируют:
+\begin{itemize}
+    \item \textbf{High-Order, HO} описание углового распределения частиц
+    \item \textbf{Low-Order, LO} приближение для интегральных характеристик (скалярный поток, векторный поток)
+\end{itemize}
+
+\subsection*{Принцип работы}
+Алгоритм строится на итерационном процессе, где две системы уравнений решаются последовательно, обмениваясь информацией:
+
+\subsubsection*{1. High-Order система}
+Полное угловое уравнение переноса в дискретном виде (например метод иттераций источника):
+
+\subsubsection*{2. Low-Order система}
+Упрощённые моментные уравнения (диффузионное приближение или $P_1$-система):
+
+
+\subsection*{Базовый алгоритм}
+\begin{enumerate}
+    \item Инициализация: задаём начальное приближение $\phi^{(0)}$
+    
+    \item Для каждой итерации $k = 0,1,2,\dots$:
+    \begin{enumerate}
+        \item \textbf{HO-шаг}: Решаем уравнение переноса с фиксированным скалярным потоком
+        Вычисляем угловые моменты
+        
+        \item \textbf{LO-шаг}: Решаем моментные уравнения с обновлёнными коэффициентами
+        
+        \item Обновляем факторы связи:
+        Коэффциент квазидиффузии
+    \end{enumerate}
+    
+    \item Проверяем сходимость:
+\end{enumerate}
+
+\subsection*{Основные типы HOLO-методов}
+
+\subsubsection*{Аддитивные алгоритмы:}
+\begin{enumerate}
+    \item DSA (Diffusion Synthetic Acceleration) ускорение
+    \item $S_2$\&A ($S_2$ Synthetic Acceleration) ускорение
+    \item T\&A (Transport \& Acceleration) ускорение
+    \item KP-методы (Krylov Projection) Лебедева
+\end{enumerate}
+
+\subsubsection*{Мультипликативные алгоритмы:}
+\begin{enumerate}
+    \item Метод квазидиффузии (Quasidiffusion) Гольдина В.Я.
+    \item AWM (Angular Weighted Method)
+\end{enumerate}
+
+\end{document}
