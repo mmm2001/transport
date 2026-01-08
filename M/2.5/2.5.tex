@@ -1,0 +1,162 @@
+\documentclass[../../main/main.tex]{subfiles}
+
+
+
+\begin{document}
+
+\section{Интегральные экспоненты разных порядков. Решение задачи переноса в плоскопараллельном полубесконечном слое для полного потока в задачах без рассеяния}
+
+\[
+\En(x) = \int_{1}^{\infty} \frac{e^{-\nu x}}{\nu^{n}} \, d\nu, \quad x \geq 0,
+\]
+
+\[
+\begin{aligned}
+\En(x) &= \int_{1}^{\infty} \frac{e^{-\nu x}}{\nu^{n}} \, d\nu 
+= \left[ \nu = \frac{1}{\mu},\; d\nu = -\frac{d\mu}{\mu^2} \right] 
+= -\int_{\infty}^{1} \mu^{n} e^{-x/\mu} \left( -\frac{d\mu}{\mu^2} \right) \\
+&= \int_{1}^{0} \mu^{n-2} e^{-x/\mu} \, d\mu 
+= \int_{0}^{1} \mu^{n-2} e^{-x/\mu} \, d\mu,
+\end{aligned}
+\]
+\[
+x \geq 0,\; n \geq 1.
+\]
+
+\subsection*{Свойства интегральных экспонент}
+
+\begin{enumerate}
+    \item \[ \lim_{x \to 0} \frac{E_1(x)}{-\ln x} = 1, \quad \lim_{x \to 0} E_n(x) = \frac{1}{n-1} \]
+    \item \[ \forall x \; \En(x) > E_{n+1}(x) \]
+    \item \[ n E_{n+1}(x) = e^{-x} - x \En(x) \]
+    \item \[ \lim_{x \to \infty} x e^{x} \En(x) \leq 1 \]
+    \item \[ \frac{d\En(x)}{dx} = -E_{n-1}(x), \quad n \geq 2 \]
+    \item \[ \En(x) = \int_{x}^{\infty} E_{n-1}(\xi) \, d\xi \]
+    \item \[ (n-1) \En(x) < n E_{n+1}(x) \]
+    \item \[ \int_{0}^{\infty} E_1(|x-\xi|) \, d\xi = 2 - E_2(x) \]
+    \item \[ \int_{0}^{\infty} \xi \, E_1(|x-\xi|) \, d\xi = 2x + E_3(x) \]
+\end{enumerate}
+Доказательство остается в качестве упражнения читателю
+\pagebreak
+
+\subsection*{Перенос в плоском случае}
+
+\[
+\mu \pderiv{\psi (x,\mu)}{x}+(\Sigma_a(x)+\Sigma_s(x))\psi(x,\mu)=\frac{\Sigma_s(x)}{2}\int_{-1}^{1}\psi(x,\mu')d\mu'+\frac{Q(x)}{2}
+\]
+
+Пренебрегая рассеянием:
+\[
+\mu \pderiv{\psi (x,\mu)}{x}+\Sigma_a(x)\psi(x,\mu)=\frac{Q(x)}{2}
+\]
+
+\[\mu \in [-1,1] \quad 0\leq x \leq X\]
+
+\begin{enumerate}
+    \item $ \mu>0 \quad \psi(0, \mu)=\psi^{in}=\psi^0  $ - изотропное излучение
+    \item $ \mu<0 \quad \psi(X,\mu)=\psi(X,-\mu)$  - цельное зеркальное отражение (specular reflection)
+\end{enumerate}
+
+\begin{figure}[ht]
+    \centering
+    \begin{minipage}[t]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{2.5_pic1.png}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{2.5_pic2.png}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{2.5_pic3.png}
+    \end{minipage}
+\end{figure}
+
+
+Сделаем переход к переменной оптической толщины:\\
+$ \tau(x)=\int_{0}^{x}\Sigma_a(x')dx' $ - монотонно возрастающая функция (отображение $\tau \leftrightarrow x$)
+
+
+\[ \mu \pderiv{\psi (x,\mu)}{x}+\Sigma_a(x)\psi(x,\mu)=\frac{Q(x)}{2} \]
+\[ \frac{1}{\Sigma_a(x)}\pderiv{\psi (x,\mu)}{x}+\psi(x,\mu)=\frac{Q(x)}{2\Sigma_a(x)} \]
+\[ \mu \deriv{\psi}{d\tau}+\psi=\frac{Q(x)}{2\Sigma_a(x)}  \]
+Решая соответвующее однородное уравнение разделением переменных $\psi=ce^{-\frac{\tau}{\mu}}$
+Методом вариации постоянной:
+\[
+    c'(\tau)=\frac{1}{\mu}e^{\frac{\tau}{\mu}}B(\tau)
+\]
+
+\[
+    \begin{cases}
+        c(\tau)=\int_{T}^{\tau} \frac{1}{\mu}e^{\frac{\tau'}{\mu}}B(\tau')d\tau'+c_1 \quad \mu>0 \\
+        c(\tau)=\int_{0}^{\tau} \frac{1}{\mu}e^{\frac{\tau'}{\mu}}B(\tau')d\tau'+c_0 \quad \mu<0\\
+    \end{cases}
+\]
+
+
+\[
+    \begin{cases}
+        \psi^{+}(\tau, \mu)=c_0e^{\frac{-\tau}{\mu}}+\int_{0}^{\tau}\frac{1}{\mu}e^{\frac{(\tau-\tau')}{\mu}}B(\tau')d\tau' \\
+        \psi^{+}(\tau, \mu)=c_1e^{\frac{-\tau}{\mu}}+\int_{T}^{\tau}\frac{1}{\mu}e^{\frac{(\tau-\tau')}{\mu}}B(\tau')d\tau' \\
+
+    \end{cases}
+\]
+
+Из граничных условий находим: \\
+\[
+    c_0=\psi_0 \quad \quad c_1=(\psi_0e^{\frac{T}{\mu}}-\int_{0}^{T}\frac{1}{\mu}B(\tau)e^{\frac{t-\tau'}{\mu}}d\tau')e^{\frac{T}{\mu}}
+\]
+
+
+Необходимо найти полный скалярный и векторный поток:\\
+\\
+$
+    \phi(\tau)=\int_{-1}^{1}\psi(\tau, \mu)d\mu
+$ - скалярный поток 
+\\
+$
+    J(\tau)=\int_{-1}^{1}\mu\psi(\tau, \mu)d\mu
+$ - векторный поток 
+
+\pagebreak
+
+Для вычисления скалярного потока:
+\[
+\phi(\tau)=\int_{-1}^{0}\psi^-(\tau,\mu)d\mu+\int_{0}^{1}\psi^+(\tau,\mu)d\mu
+\]
+
+\[
+    \phi^+(\tau)=\int_{0}^{1}\psi_0 e^{\frac{-\tau}{\mu}}d\mu +
+    \int_{0}^{\tau}B(\tau')\int_{0}^{1}\frac{1}{\mu} e^{\frac{\tau'-\tau}{\mu}}d\tau'=
+    \phi_0^+E_2(\tau)+\int_{0}^{\tau}B(\tau')E_2(\tau-\tau')d\tau'
+\]
+
+\[
+    \phi^-(\tau)=\int_{-1}^{0}\psi^-(\tau,\mu)d\mu=\phi_0E_2(2T-\tau)+\int_{0}^{T}B(\tau')E_1(2T-\tau-\tau')d\tau'+
+    \int_{\tau}^{T}B(\tau')E_2(\tau'-\tau)d\tau'
+\]
+
+Для вычиления векторного потока:
+\[
+    J^+(\tau)=\psi_0E_3(\tau)+\int_{0}^{\tau}B(\tau')E_2(\tau-tau')d\tau'
+\]
+
+\[
+    J^-(\tau)=\psi_0E_3(2T-\tau)+\int_{0}^{T}B(\tau')E_2(2T-\tau-tau')d\tau'+\int_{\tau}^{T}B(\tau')E_2(\tau'-\tau)d\tau'
+\]
+
+
+\subsection*{Вычисление интегральных экспонент}
+
+  \begin{itemize}
+    \item $E_1(x)=-c-ln(x)-\sum_{k=1}^{\infty}\frac{(-1)^kx^k}{k\cdot k!}$ при $x\lesssim 2.5$ $c=0.577215664901533$
+    \item $E_1(x)=\frac{e^{-x}}{x}\sum_{k=0}^{N}\frac{(-1)^k\cdot k!}{x^k}$ при $x\gg 1$
+    \item \Large$$E_n(x)=\frac{e^{-x}}{x + \frac{n}{1 + \frac{1}{x + \frac{n+1}{1 + \frac{2}{x + \frac{n+2}{1 + \frac{3}{\ddots}}}}}}}$$
+  \end{itemize}
+
+  При вычислении через ряды используется рекурентая формула (7)
+
+\end{document}
