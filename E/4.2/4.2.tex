@@ -1,0 +1,87 @@
+\documentclass[../../main/main.tex]{subfiles}
+
+\begin{document}
+\section{Метод итераций по делению (PI-метод). В чем его главная трудность?}
+
+\subsection{Проблема нахождения собственных значений}
+
+Рассматривается уравенение:
+
+\begin{equation*}
+\mu \frac{\partial \psi (x,\mu)}{\partial x} + \Sigma_t(x) \psi (x,\mu) = \frac{\Sigma_s(x)}{2} \int_{-1}^{1} \psi (x, \mu') d\mu' + \underbrace{  \frac{1}{k} \frac{1}{2} \nu \Sigma_f(x) \int_{-1}^{1} \psi (x, \mu') d\mu'  }_{\text{член деления}}
+\end{equation*}
+$k$ -- коэффициент сжатия нейтронов.
+\begin{itemize}
+\item $k=1$ -- критический режим (поддерживается в реакторе)
+\item $k<1$ -- подкритический режим (затухание)
+\item $k>1$ -- бесконтрольное увеличение (ЯДЕГХКА САМОСИР)
+\end{itemize}
+Ставится, как и ранее, ГУ:
+\begin{itemize}
+\item $\psi(0,\mu) = 0$, $\mu >0$
+\item $\psi(X, \mu) = \psi (X, -\mu)$, $\mu < 0$
+\end{itemize}
+
+Требуется найти такое $k$, при котором существует нетривиальное решение уравнения:
+\begin{equation*}
+L \psi(x,\mu) = \frac{1}{k} P \psi(x, \mu)
+\end{equation*}
+где $L$, $P$ -- линейные операторы:
+\begin{equation*}
+L \psi(x,\mu) = \mu \frac{\partial \psi (x,\mu)}{\partial x} + \Sigma_t(x) \psi (x,\mu) - \frac{\Sigma_s(x)}{2} \int_{-1}^{1} \psi (x, \mu') d\mu'
+\end{equation*}
+\begin{equation*}
+P \psi(x,\mu) = \frac{1}{k} \frac{1}{2} \nu \Sigma_f(x) \int_{-1}^{1} \psi (x, \mu') d\mu'
+\end{equation*}
+Получаем:
+\begin{equation*}
+k \psi(x,\mu) = A \psi (x,\ mu)
+\end{equation*}
+$A = L^{-1}P$ -- ограниченный положительно определенный оператор (и, соответственно, матрица при дискретизации).
+
+\subsection{Power iteration (метод итераций по делению, степенной метод)}
+Внешние итерации по члену деления.
+\begin{equation*}
+L \psi^{(n+1/2)} (x,\mu) = P\psi^{(n)} (x,\mu)
+\end{equation*}
+$\psi^{(0)} (x,\mu) \neq 0$.
+Нахождение $\psi^{()} (x,\mu)$ означает итерации по рассеянию с известным источником $Q(x)/2 = P \psi^{(n)} (x,\mu)$.
+
+\begin{equation*}
+\psi^{(n+1)} (x,\mu) = \frac{\psi^{(n+1/2)} (x,\mu)}{ \| \psi^{(n+1/2)} (x,\mu) \|}
+\end{equation*}
+
+\begin{equation*}
+k^{(n+1)} = \| \psi^{(n+1/2)} (x,\mu) \|
+\end{equation*}
+
+\begin{equation*}
+k_1^{(n)} = \frac{\| A^n \psi^0 (x,\mu) \| }{\| A^{n-1} \psi^0 (x,\mu) \|}
+\end{equation*}
+
+Обозначим $u_n$ -- собственные функции оператора $A$.
+
+\begin{equation*}
+\psi^{(0)} = \sum_{m=1}^\infty a_m u_m(x,\mu)
+\end{equation*}
+-- разложение по базису из собственных функций. \\
+\textit{Примечение автора. Вообще говоря, разложение по собс. функциям существует всегда только для самосопряженных операторов. Положительная определенность не гарантирует, что у оператора всегда существует базис из собственных функций.}\\
+
+\begin{equation*}
+\psi^{(n)} = \frac{A^n \psi^{(0)} }{\| A^n \psi^{(0)} \|} = \frac{\sum_{m=1}^{\infty} a_m k_m^n u_m(x,\mu) }{\| \sum_{m=1}^{\infty} a_m k_m^n u_m(x,\mu) \|}
+\end{equation*}
+
+\begin{align*}
+\psi^{(1)} &= \frac{  a_1 k_1^n u_1 +\sum_{m=2}^{\infty} a_m k_m^n u_m(x,\mu) }{ \| a_1 k_1^n u_1 +\sum_{m=2}^{\infty} a_m k_m^n u_m(x,\mu) \|} \\
+&= \frac{a_1u_1 + \sum_{m=2}^\infty a_m \left( \frac{k_m}{k_1} \right)^n u_m(x,\mu) }{ \| a_1u_1 + \sum_{m=2}^\infty a_m \left( \frac{k_m}{k_1} \right)^n u_m(x,\mu) \|} \\
+&= u_1 + O\left( \left( \frac{k_2}{k_1} \right) \right)
+\end{align*}
+
+\begin{equation*}
+k_1^{(n)} = \frac{\| A^n \psi^{(0)} (x,\mu) \|}{\| A^{n-1} \psi^{(0)} (x,\mu) \|} = k_1 + O\left( \left( \frac{k_2}{k_1} \right) \right)
+\end{equation*}
+
+Скорость сходимости итераций по делению определяется $r = k_2/k_1$. Чем ближе $r$ к $1$, тем хуже сходимость; $r \rightarrow 1$ -- сходимость отсутствует. Число PI, требуемое для достижения заданной точности -- $N$. Число расчет уравнения переноса (транспортный проход) есть $N \cdot$ среднее число итераций по рассеянию: в $N$ раз дороже решения задачи на рассеяние.
+
+
+\end{document}
