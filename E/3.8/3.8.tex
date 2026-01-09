@@ -1,0 +1,254 @@
+\documentclass[../../main/main.tex]{subfiles}
+
+\begin{document}
+\section{Квадратуры Гаусса и их использование для интегрирования по углам. Вывод кинетически-согласованной разностной схемы для DSA-метода ускорения итераций по рассеянию}
+
+\subsection{Квадратуры Гаусса и их использование для интегрирования по углам}
+
+Для интегрирования 
+\begin{equation*}
+\int_{-1}^{1} \psi (x, \mu) d \mu
+\end{equation*}
+применяется $S_N$ метод. Он состоит в использовании квадратур Гаусса.
+
+В \textbf{методе Гаусса},
+\begin{equation*}
+\int_{-1}^{1} f(x) dx = \sum_{i=1} \omega_i f(x_i) 
+\end{equation*}
+\begin{itemize}
+\item  $\omega_i$ -- веса квадратуры
+\item $x_i$ -- узлы квадратуры
+\end{itemize}
+Метод Гаусса состоит в подборе узлов и весов так, чтобы формула
+\begin{equation*}
+\int_{-1}^{1} f(x) dx = \sum_{i=1} \omega_i f(x_i)
+\end{equation*}
+была точна на полиномах заданной степени.
+
+Будем использовать $N$ точек. Хотим получить точность на полиномах максимально возможной степени. Для этого будем использовать полиномы Лежандра $P_N(x)$, причем $P_N(x_i) = 0$, т.е. узлы -- корни полинома Лежандра. Для нас важно, что \textbf{полиномы Лежандра ортогональны} в пространстве $L_2[-1;1]$.
+
+Пусть $f(x)$ -- полином степени $\leq 2N-1$. Тогда, поделим этот полином на $P_N(x)$. Получим представление: 
+\begin{equation}
+f(x) = Q(x)P_N(x) + R(x)
+\end{equation}
+где $Q(x)$ -- частное, полином степени $\leq 2N-1$, $R(x)$ -- остаток, полином степени $leq N-1$.
+
+Тогда:
+
+\begin{equation*}
+\int_{-1}^{1} f(x)dx = \underbrace{ \int_{-1}^{1} Q(x)P_N(x)dx  }_{=0 \text{ из ортогональности}} + \int_{-1}^{1} R(x) dx
+\end{equation*}
+
+Т.е.,
+
+\begin{equation*}
+\int_{-1}^{1} f(x)dx = \int_{-1}^{1} R(x)dx
+\end{equation*}
+
+\begin{equation*}
+\int_{-1}^{1} f(x_i)dx = \int_{-1}^{1} R(x_i)dx
+\end{equation*}
+
+Строим квадратуру как интерполяцию Лагранжа с узлами в корнях $P_N(x)$:
+
+\begin{equation*}
+R(x) \approx L(x) = \sum_{i=1}^N R(x_i) l_n(x_i)
+\end{equation*}
+где
+\begin{equation*}
+l_n(x) = \prod_{j=1, j \neq n}^N \frac{(x-x_j)}{x_n-x_j}
+\end{equation*}
+
+Тогда:
+
+\begin{equation*}
+\int_{-1}^{1} f(x_i)dx = \int_{-1}^{1} R(x)dx = \int_{-1}^{1} \sum_{i=1}^N R(x_i) l_n(x_i) dx = \sum_{i=1}^N R(x_i) \int_{-1}^{1} l_n(x)dx
+\end{equation*}
+
+Отсюда
+
+\begin{equation*}
+w_n = \int_{-1}^{1} l_n(x)dx
+\end{equation*}
+
+Вышеприведенные выкладки верны для полиномов степени до $2N-1$, т.е. квадратура по $N$ узлам точна для полиномов степени до $2N-1$. 
+
+Именно тот факт, что полиномы ортогональны на $[-1;1]$ позволяет удобно использовать их для точного интегрирования слагаемого скалярного потока.
+
+\subsubsection*{Пример использования в разностной схеме}
+
+Рассмотрим \textbf{алмазную схему} по пространству.
+
+\begin{equation*}
+\mu \frac{\psi(x_{j+1/2}, \mu_n) - \psi(x_{j-1/2}, \mu_n)}{h_j} + \Sigma_t(x_j) \psi(x_{j}, \mu_n) = \frac{\Sigma_s(x_j)}{2} \Phi(x_j) + Q(x_j)/2
+\end{equation*}
+Обозначим:
+$\psi(x_j, \mu_n) =: \psi_{j,n}$
+
+\begin{equation*}
+\psi_{j,n} = \frac{1}{h_j}\int_{x_{j-1/2}}^{x_{j+1/2}} \psi(x,\mu_n) dx
+\end{equation*}
+
+В \textbf{алмазной схеме},
+
+\begin{equation*}
+\psi_{j,n} = \frac{1}{2} (\psi_{j-1/2, n} + \psi_{j+1/2,n})
+\end{equation*}
+
+Для интегрирования скалярного потока -- квадратура Гаусса:
+
+\begin{equation*}
+\Phi_j = \sum_{n=1}^{N} \omega_n \psi_{j,n}
+\end{equation*}
+
+Разностная схема:
+
+\begin{equation*}
+\mu \frac{\psi_{j+1/2,n} - \psi_{j-1/2,n}}{h_j} + \Sigma_{t,j} (\psi_{j-1/2,n} + \psi_{j+1/2,n}) = \frac{\Sigma_{s,j}}{2} \Phi_j + Q_j/2
+\end{equation*}
+
+\subsubsection*{Пример в методе итераций источника}
+
+Опишем метод итераций источника.
+
+\textbf{1. HO-часть: Метод итераций источника}
+\begin{equation*}
+\mu \frac{\psi_{j+1/2,n}^{(l+1/2)} - \psi_{j-1/2,n}^{(l+1/2)}}{h_j} + \Sigma_{t,j} (\psi_{j-1/2,n}^{(l+1/2)} + \psi_{j+1/2,n}^{(l+1/2)}) = \frac{\Sigma_{s,j}}{2} \Phi_j^{(l)} + Q_j/2
+\end{equation*}
+Граничные условия:
+\begin{itemize}
+\item $\psi_{1/2,n}^{(l+1/2)} = \psi_n^{in}$, $\mu_n > 0$
+\item $\psi_{J+1/2,n}^{(l+1/2)} = \psi_{1/2,m}^{(l+1/2)}$, где $\mu_ = -\mu_m < 0$ -- условие отражения
+\end{itemize}
+
+Используется метод бегущего счета:
+
+\begin{equation*}
+\mu_n > 0 ~:~ \psi_{j+1/2,n}^{(l+1/2)} = \frac{ (2 \mu_n - \Sigma_{t,j} h_j)\psi_{j-1/2,n}^{(l+1/2)} + h_j(\Sigma_{s,j} \Phi_j^{(l)} + Q_j)}{2\mu_n + \Sigma_{t,j} h_j}
+\end{equation*}
+$j = 1/2 \rightarrow 3/2 \rightarrow \dots \rightarrow J+1/2$. На правой границе: $\psi_{J+1/2,n}^{(l+1/2)} = \psi_{J+1/2,m}^{(l+1/2)}$
+
+\begin{equation*}
+\mu_n < 0 ~:~ \psi_{j+1/2,n}^{(l+1/2)} = \frac{ (2 | \mu_n | - \Sigma_{t,j} h_j)\psi_{j+1/2,n}^{(l+1/2)} + h_j(\Sigma_{s,j} \Phi_j^{(l)} + Q_j)}{2|\mu_n| + \Sigma_{t,j} h_j}
+\end{equation*}
+$J+1/2 \rightarrow J-1/2 \rightarrow \dots \rightarrow 1/2$
+
+\textbf{2. LO-часть}
+\begin{equation*}
+\Phi_j^{(l+1)} = \Phi_j^{(l+1/2)} = \sum_{n=1}^{N} \omega_n \psi_{j,n}^{(l+1/2)} = 
+\frac{1}{2} \sum _{n=1}^{N} \omega_n (\psi_{j-1/2,n}^{(l+1/2)} + \psi_{j+1/2,n}^{(l+1/2)})
+\end{equation*}
+\textbf{алмазность схемы} здесь в том, что $\psi_{j,n}^{(l+1/2)} = \psi_{j-1/2,n}^{(l+1/2)} + \psi_{j+1/2,n}^{(l+1/2)}$
+
+Итерации выполняются до критерия останова: $\| \Phi^{(l+1)} - \Phi^{(l)} \| \leq \varepsilon$.
+
+\subsection{Вывод кинетически-согласованной разностной схемы для DSA-метода ускорения итераций по рассеянию}
+
+1. Транспортный проход сделан, $\psi_{n,j}^{(l+1/2)}$ известны. Введем погрешности:
+
+\begin{equation*}
+f_{j\pm1/2,n} = \psi_{j\pm1/2,n} - \psi_{j\pm1/2,n}^{(l + 1/2)}
+\end{equation*}
+
+Вычитая из точного уравнения уравнение для $\psi^{(l+1/2)}$, получим:
+
+\begin{equation*}
+\frac{\mu_n}{h_j}\left( f_{j+1/2,n} - f_{j-1/2,n} \right) + \Sigma_t f_{j,n} - \frac{\Sigma_{sj}}{2} \sum_{n=1}^N \omega_n f_{j,n} = \frac{\Sigma_{sj}}{2} 
+\left( \Phi_j^{(l+1/2)} - \Phi_j^{(l)} \right)
+\end{equation*}
+
+$f_{j,n} = \frac{1}{2} ( f_{j+1/2,n} + f_{j-1/2,n} )$.
+
+Граничные условия:
+\begin{itemize}
+\item $f_{1/2,n} = 0$, $\mu_n > 0 $
+\item $f_{J+1/2,n} = f_{J+1/2,m}$, $\mu_n = -\mu_m < 0 $
+\end{itemize}
+
+В соответствии с логикой $P_1$-приближения,
+\begin{equation*}
+f_{j\pm1/2,n} = \frac{1}{2} \left( \underbrace{1}_{P_0(\mu)=1} \cdot F_{j\pm1/2} + 3 \underbrace{\mu_n}_{P_1(\mu_n)=\mu} G_{j\pm1/2} \right) + \dots \text{многочлены Лежандра высших порядков} 
+\end{equation*}
+
+Обозначим (*) уравнение: (то же что было выше)
+\begin{equation*}
+\frac{\mu_n}{h_j}\left( f_{j+1/2,n} - f_{j-1/2,n} \right) + \Sigma_t f_{j,n} - \frac{\Sigma_{sj}}{2} \sum_{n=1}^N \omega_n f_{j,n} = \frac{\Sigma_{sj}}{2} 
+\left( \Phi_j^{(l+1/2)} - \Phi_j^{(l)} \right) \tag{*}
+\end{equation*}
+
+2. Домножим (*) на $\omega_n$ и просуммируем по $n$ (численно интегрируем по формуле Гаусса с весом 1).
+
+\begin{equation*}
+\frac{1}{h_j} \left( G_{j+1/2}^{(l+1)} - G_{j-1/2}^{(l+1)} \right) + \Sigma_{aj} F_j^{(l+1)} = \Sigma_{sj} \left( \Phi_j^{(l+1/2)} - \Phi_j^{(l)} \right)
+\end{equation*}
+Домножим на $\mu_n \omega_n$ и просуммируем (численно $\int_{-1}^{1} \dots \mu d\mu$ )
+
+\begin{equation*}
+\frac{1}{3} \frac{1}{h_j} \left( F_{j+1/2}^{(l+1)} - F_{j-1/2}^{(l+1)} \right) + \Sigma_{tj} G_j^{(l+1)} = 0
+\end{equation*}
+
+Приведенные выше результаты получены применением свойств квадратуры Гаусса:
+
+\begin{equation*}
+\sum_{n=1}^N \omega_n = 2
+\end{equation*}
+\begin{equation*}
+\sum_{n=1}^N \omega_n \mu_n = 0
+\end{equation*}
+\begin{equation*}
+\sum_{n=1}^N \omega_n \mu_n^2 = 2/3
+\end{equation*}
+\begin{equation*}
+\sum_{n=1}^N \omega_n \mu_n^3 = 0
+\end{equation*}
+и разложения $f$ по полиномам Лежандра.
+
+\textbf{Алмазность}:
+\begin{equation*}
+F_j^{(l+1)} = \frac{1}{2} \left( F_{j+1/2}^{(l+1)} + F_{j-1/2}^{(l+1)} \right)
+\end{equation*}
+\begin{equation*}
+G_j^{(l+1)} = \frac{1}{2} \left( G_{j+1/2}^{(l+1)} + G_{j-1/2}^{(l+1)} \right)
+\end{equation*}
+ГУ нулевого падающего потока слева:
+\begin{equation*}
+0 = \sum_{\mu_n>0} (2\mu_n)f_{1/2,n}\omega_n \approx \sum_{\mu_n>0} \mu_n
+\left( F_{1/2}^{(l+1)} + 3\mu_n G_{1/2}^{(l+1)} \right) \omega_n 
+= \gamma F_{1/2}^{(l+1)} + G_{1/2}^{(l+1)}
+\end{equation*}
+$\gamma \approx 1/2$, $\gamma = \sum_{\mu_n>0}\mu_n \omega_n$
+
+\textbf{Цель}: получить уравнение только для $F$ с полуцелыми индексами. Надо исключить $G$ (все индексы) и $F_{j,n}$.
+
+\begin{equation*}
+G_{j+1/2,n} - G_{j-1/2,n} + \frac{\Sigma_{aj}h_j}{2} \left( F_{j+1/2} + F_{j-1/2} \right) = \Sigma_{sj} h_j \left( \Phi_j^{(l+1/2)} - \Phi_j^{(l)} \right) \tag{1}
+\end{equation*}
+\begin{equation*}
+G_{j+1/2} + G_{j-1/2} + \frac{2}{3\Sigma_{tj}h_j} \left( F_{j+1/2} - F_{j-1/2} \right) = 0 \tag{2}
+\end{equation*}
+Складываем (1) и (2), получим:
+\begin{equation*}
+G_{j+1/2} = - \frac{1}{3 \Sigma_{tj}h_j} \left( F_{j+1/2} - F_{j-1/2} \right)
+- \frac{\Sigma_{aj}h_j}{4} \left( F_{j+1/2} - F_{j-1/2} \right)
++ \frac{\Sigma_{sj}h_j}{2} \left( \Phi_j^{(l+1/2)} - \Phi_j^{(l)} \right)
+\end{equation*}
+Вычитаем из (1) (2), и заменяем индексы: $j \rightarrow j+1$.
+Полученные сложением и вычитанием выражения для $G_{j+1/2}$ приравниваем.
+
+\begin{align*}
+G_{j+1/2} &= - \frac{1}{3\Sigma_{t,j+1}h_{j+1}} \left( F_{j+3/2} - F_{j+1/2} \right) + \frac{\Sigma_{a,j+1} h_{j+1}}{4} \left( F_{j+3/2} - F_{j+1/2} \right) \\
+&- \frac{\Sigma_{s,j+1}h_{j+1}}{2} \left( \Phi_{j+1}^{(l+1/2)} - \Phi_{j+1}^{(l)} \right) 
+- \frac{1}{3\Sigma_{t,j}h_{j+1}} \left( F_{j+3/2} - F_{j+1/2} \right) \\
+&+ \frac{1}{3\Sigma_{t,j}h_j} \left( F_{j+1/2} - F_{j-1/2} \right)
++ \frac{\Sigma_{a,j+1}h_{j+1}}{4} \left( F_{j+1/2} + F_{j+3/2} \right) \\
+&+ \frac{\Sigma_{a,j}h_j}{4} \left( F_{j+1/2} + F_{j-1/2} \right) \\
+&= \frac{\Sigma_{s,j+1}h_{j+1}}{2} \left( \Phi_{j+1}^{(l+1/2)} - \Phi_{j+1}^{(l)} \right)
++ \frac{\Sigma_{s,j} h_j}{2} \left( \Phi_j^{(l+1/2)} - \Phi_j^{(l)} \right)
+\end{align*}
+$\Phi_J^{(l+1)} = \Phi_j^{(l+1/2)} + \frac{1}{2} \left( F_{j-1/2}^{(l+1)} + F_{j+1/2}^{(l+1)} \right)$
+\begin{itemize}
+\item Уравнения второго порядка на требуют кинетической согласованности
+\end{itemize}
+
+
+\end{document}
