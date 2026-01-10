@@ -1,0 +1,101 @@
+\documentclass[../../main/main.tex]{subfiles}
+
+\begin{document}
+\section{Поглощение и излучение в задачах радиационного переноса. Аналогия с задачами переноса нейтронов}
+
+Рассматривается система уравнений высокотемпературной радиационной газовой динамики.
+
+Выделяют блок совместного решения уравнения переноса с уравнением энергии (условно, при замороженной $\operatorname{div} \vec{w}_T$, $\vec{w}_T$ -- тепловой поток).
+
+Многогрупповое приближение переноса излучения.
+
+\begin{equation*}
+\frac{1}{c} \frac{\partial \psi_g(x,\mu,t) }{\partial t}
++ \mu \frac{\partial \psi_g(x,\mu,t) }{\partial x}
++ \Sigma_g (x,t) \psi_g(x,\mu,t)=
+\Sigma_g (x,t) B_g(x,t)
+\end{equation*}
+$\Sigma_g$ -- коэффициент полгощения. $B_g$ -- Планковская функция собственного излучения плазмы.
+Уравнение энергии:
+\begin{equation*}
+c_p \frac{\partial T (x,t)}{\partial t} = \sum_{g=1}^{G} \Sigma_g (x,t) \int_{-1}^{1} \left[ \psi_g(x, \mu, t) - B_g(x,\mu,t) \right] d\mu + Q(x)
+\end{equation*}
+
+Функция Планка:
+\begin{equation*}
+B_g(T) = \int_{\nu_g - 1/2}^{\nu_g + 1/2} \frac{4 \pi h \nu^3}{c^2} \frac{1}{c^{(h \nu) / (kT)}} d\nu
+\end{equation*}
+$y:= h\nu / kT$
+\begin{equation*}
+B_g(T) = \int_{y_g - 1/2}^{y_g + 1/2} \frac{4 \pi h y^3 \left( \frac{kT}{h} \right)^3 }{c^2} \frac{1}{e^y-1} \frac{kT}{h} dy = \sigma_g T^4 
+\end{equation*}
+\begin{equation*}
+\sigma_g = \frac{k^4}{h^4} \frac{4 \pi}{c^2} \int_{y_g - 1/2}^{y_g+1/2} \frac{1}{e^y-1}dy
+\end{equation*}
+
+Явная схема бессмысленна -- $\frac{c \tau}{h} < 1$, но $c$ -- скорость света!
+
+Используем неявную аппроксимацию по времени.
+
+Обозначения:
+$\psi (x, \mu, t^{n+1}) \rightarrow \psi(x,\mu)$ \\
+$\psi (x, \mu, t^n) \rightarrow \psi^n(x,\mu)$ \\
+Индекс есть -- старый шаг, индекса нет -- новый шаг.
+
+\begin{equation*}
+\frac{1}{c} \frac{\psi_g(x\mu) - \psi_g^n (x,\mu) }{\Delta t}
++ \mu \frac{\partial \psi_g (x,\mu)}{\partial x}
++ \Sigma_g(x) \psi_g(x,\mu) = \Sigma_g(x) \tilde{B}_g(x)
+\end{equation*}
+
+\begin{equation*}
+c_p \frac{ T(x) - T^n(x) }{\Delta t} =
+\sum_{g=1}^G \Sigma_g \int_{-1}^{1} \left[ \psi_g (x,\mu) - \tilde{B}_g(x) \right] d \mu + Q(x)
+\end{equation*}
+
+\begin{equation*}
+\tilde{B}_g(x) = B_g^n(x) + \left[ T(x) - T^n(x) \right] \dot{B}_g(x)
+\end{equation*}
+$\dot{B}_g$ -- производная по времени.
+
+На картинке есть какие-то пояснения, но я не знаю, что они значат.
+\begin{figure}[h!]
+\centering
+\includegraphics[width = 0.9\textwidth]{4.7_pic1.jpg}
+\end{figure}
+
+Исключая эту разность $T(x) - T^n(x)$,
+
+\begin{equation*}
+\mu \frac{\partial \psi_g (x,\mu) }{\partial x}
++ \tilde{\Sigma}_g (x) \psi_g(x,\mu)
+=
+\frac{\chi_g}{2} \sum_{g=1}^G \eta(x) \Sigma_g(x)
+\int_{-1}^{1} \psi_g(x,\mu) d\mu + S_g(x,\mu)
+\end{equation*}
+где:
+\begin{itemize}
+\item $\tilde{\Sigma}_g(x) = \Sigma_g(x)  \frac{1}{c \delta t}$
+\item $\eta (x) = 
+\frac{\sum_{g=1}^G \Sigma_g(x) \dot{B}_g^n(x)}
+{c_p/(2\Delta t) + \sum_{g=1}^G \Sigma_g(x) \dot{B}_g^n(x) }$
+\item $\chi_g(x) = 
+\frac{\Sigma_g(x) \dot{B}_g(x)}
+{\sum_{g'=1}^G \Sigma_{g'}(x) \dot{B}_{g'} (x)}$
+\item
+\begin{equation*}
+S_g(x,\mu) = \frac{1}{c \Delta t} \psi_g^n (x, \mu) + \Sigma_g B_g^n (x) +
+\eta \frac{\chi_g}{2} \left[ Q(x) + 2 \sum_{g'=1}^G \Sigma_{g'} (x) B_{g'}^n (x) \right]
+\end{equation*}
+
+\end{itemize}
+
+Аналогия с подкритичными задачами переноса нейтронов. Требует ускорения итераций по "рассеянию", возникшему из уравнения энергии.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width = 0.9\textwidth]{4.7_pic2.png}
+\end{figure}
+
+
+\end{document}
