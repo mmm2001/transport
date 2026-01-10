@@ -1,0 +1,106 @@
+\documentclass[../../main/main.tex]{subfiles} 
+
+\begin{document}
+
+\section{Уравнение переноса в форме уравнения второго порядка для четной, нечетной компонент решения по угловой переменной и для исходного углового потока}
+
+\textit{Что дает использование уравнения второго порядка?}\\
+Оператор второго порядка (типа эллиптического) часто является симметричным и положительно определенным.
+Естественная свзяь с уравнением для поправок DSA метода.
+\\
+Рассмотрим уравнение переноса в одномерной плоской геометрии:
+\begin{equation*}
+\pderiv{\Psi(x,\mu)}{x} + \Sigma_t(x) \Psi(x,\mu) = \frac{\Sigma_s(x)}{2} \Phi(x) + \frac{Q(x)}{2},
+\end{equation*}
+где
+\begin{equation*}
+\Phi(x) = \int_{-1}^{1} \Psi(x,\mu') \, d\mu' \quad\text{ - скалярный поток}
+\end{equation*}
+
+Граничные условия задаются следующим образом:
+\begin{align*}
+\Psi(0,\mu) &= \Psi^{\text{in}}(\mu), \quad \mu > 0, \\
+\Psi(X,\mu) &= \Psi(X,-\mu), \quad \mu < 0.
+\end{align*}
+
+Введём чётную и нечётную компоненты углового потока:
+\[
+\begin{cases}
+\Psi^{+}(x,\mu) &= \frac{1}{2} \left( \Psi(x,\mu) + \Psi(x,-\mu) \right) \\
+\Psi^{-}(x,\mu) &= \frac{1}{2} \left( \Psi(x,\mu) - \Psi(x,-\mu) \right)
+\end{cases}
+\]
+
+так что
+
+\begin{equation*}
+\Psi(x,\mu) = \Psi^{+}(x,\mu) + \Psi^{-}(x,\mu).
+\end{equation*}
+\vspace{5 px}
+
+Система уравнений для $\Psi(x,\mu)$ и $\Psi(x,-\mu)$:
+\[
+\begin{cases}
+\pderiv{\Psi(x,\mu)}{x} + \Sigma_t(x) \Psi(x,\mu) &= \frac{\Sigma_s(x)}{2} \Phi(x) + \frac{Q(x)}{2}, \\
+\pderiv{\Psi(x,-\mu)}{x} + \Sigma_t(x) \Psi(x,-\mu) &= \frac{\Sigma_s(x)}{2} \Phi(x) + \frac{Q(x)}{2}.
+\end{cases}
+\]
+
+
+Складывая и вычитая эти уравнения, получаем уравнения для чётной и нечётной компонент:
+
+\[
+\begin{cases}
+\pderiv{\Psi^{+}(x,\mu)}{x} + \Sigma_t(x) \Psi^{+}(x,\mu) &= \frac{\Sigma_s(x)}{2} \Phi(x) + \frac{Q(x)}{2}, \\
+\pderiv{\Psi^{-}(x,\mu)}{x} + \Sigma_t(x) \Psi^{-}(x,\mu) &= 0.
+\end{cases}
+\]
+
+Полный скалярный поток выражается через чётную компоненту:
+\begin{align*}
+\Phi(x) &= \int_{-1}^{1} \Psi(x,\mu) \, d\mu 
+= \int_{-1}^{1} \left( \Psi^{+}(x,\mu) + \Psi^{-}(x,\mu) \right) d\mu 
+= \int_{-1}^{1} \Psi^{+}(x,\mu) \, d\mu \nonumber \\
+&= 2 \int_{0}^{1} \Psi^{+}(x,\mu) \, d\mu
+\end{align*}
+
+1. Из уравнения для нечётной компоненты следует:
+\begin{equation*}
+\Psi^{-}(x,\mu) = -\frac{\mu}{\Sigma_t(x)} \pderiv{\Psi^{+}(x,\mu)}{x}.
+\end{equation*}
+
+Подставляя это выражение в уравнение для чётной компоненты, получаем уравнение второго порядка:
+\begin{equation*}
+- \mu^2 \pderiv{}{x} \left( \frac{1}{\Sigma_t(x)} \pderiv{\Psi^{+}(x,\mu)}{x} \right) + \Sigma_t(x) \Psi^{+}(x,\mu) = \frac{\Sigma_s(x)}{2} \Phi(x) + \frac{Q(x)}{2}.
+\end{equation*}
+
+\begin{itemize}
+    \item Это уравнение имеет форму диффузионного уравнения, используемого в методе DSA (Diffusion Synthetic Acceleration).
+    \item Однако постановка граничных условий для этого уравнения затруднена.
+\end{itemize}
+
+
+
+
+2. Из первого уравнения можно выразить $\Psi^{+}(x,\mu)$:
+\begin{equation*}
+\Psi^{+}(x,\mu) = -\frac{\mu}{\Sigma_t(x)} \pderiv{\Psi^{-}(x,\mu)}{x} + \frac{\Sigma_s(x)}{2 \Sigma_t(x)} \Phi(x) + \frac{Q(x)}{2 \Sigma_t(x)},
+\end{equation*}
+что приводит к другому уравнению второго порядка для $\Psi^{-}(x,\mu)$:
+\begin{equation*}
+- \mu^2 \pderiv{}{x} \left( \frac{1}{\Sigma_t(x)} \pderiv{\Psi^{+}(x,\mu)}{x} \right) + \Sigma_t(x) \Psi^{-}(x,\mu) = -\mu \pderiv{}{x} \left( \frac{\Sigma_s(x)}{2} \Phi(x) + \frac{Q(x)}{2} \right).
+\end{equation*}
+
+
+Для этого уравнения также трудно сформулировать общие граничные условия, поскольку они естественным образом задаются для $\Psi$, а не для $\Psi^{+}$ или $\Psi^{-}$
+
+
+
+3.Рассмотрим самосопряжённое уравнение для углового потока (SAAP — Self-Adjoint Angular Flux equation):
+\begin{align*}
+- \mu^2 \pderiv{}{x} \left( \frac{1}{\Sigma_t(x)} \pderiv{\Psi(x,\mu)}{x} \right) + \Sigma_t(x) \Psi(x,\mu) = \\
+= \frac{\Sigma_s(x)}{2} \Phi(x) + \frac{Q(x)}{2} + \mu \pderiv{}{x} \left( \frac{\Sigma_s(x)}{2} \Phi(x) + \frac{Q(x)}{2} \right).
+\end{align*}
+Для этого уравнения граничные условия формулируются естественным образом. Однако при переходе к многомерным задачам (включая зависимость от энергии) могут возникнуть дополнительные сложности.
+
+\end{document}
