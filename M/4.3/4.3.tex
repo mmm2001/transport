@@ -1,0 +1,64 @@
+\documentclass[../../main/main.tex]{subfiles} 
+
+\begin{document}
+
+\section{Метод итериаций по делению со сдвигом SPI}
+
+Все так же решается задача на собственные значения:
+$$L\Psi(x, \mu)=\frac 1k P\Psi(x,\mu)$$
+Пусть $\chi > K_1$\\
+Рассмотрим задачу:
+\[
+    L\Psi(x,\mu)-\frac 1\chi P\Psi(x, \mu)=(\frac 1k - \frac 1\chi )P\Psi
+\]
+
+
+\[
+    \left(L- \frac 1\chi P\right)\Psi(x, \mu)=\left(\frac 1k - \frac 1\chi \right)P\Psi
+\]
+
+
+\[
+    \left(L- \frac 1\chi P\right)\Psi^{n+\frac 12}(x, \mu)
+    =\left(\frac 1k - \frac 1\chi \right)P\Psi^{n}
+\]
+
+\[
+    \Psi^{n+1}=\frac{\Psi^{n+\frac 12}(x,\mu)}{\left\|\Psi^{n+\frac 12}(x,\mu)\right\|}
+\]
+
+\[
+    \frac{1}{k_1^{n+1}}-\frac 1\chi =
+    \frac{1}{\left\| \Psi^{n+\frac 12}(x,\mu) \right\|}
+\]
+
+
+\[
+    \left( I  - \frac 1\chi  \right)\Psi^{n+\frac 12}=L^{-1}P\Psi^n
+\]
+
+
+
+\[
+    \Psi^{n+\frac 12}=\left( I  - \frac 1\chi  \right)^{-1}L^{-1}P\Psi^n
+\]
+
+
+\[
+    \frac{1}{k_1^{n+1}}-\frac 1\chi = 
+    \frac{\left\| \left[\left( I  - \frac 1\chi  \right)^{-1}L^{-1}P\right]^n \Psi^{0}\right\|}
+    {\left\| \left[\left( I  - \frac 1\chi  \right)^{-1}L^{-1}P\right]^{n+1} \Psi^{0}\right\|}
+\]
+
+
+\[
+    r=\frac{\left| \frac{k_2}{1-\frac{k_2}{\chi}} \right|}{\left| \frac{k_1}{1-\frac{k_1}{\chi}} \right|}=
+    \frac{k_2}{k_1}\frac{\chi -k_1}{\chi-k_2} \quad\text{-  второй сомножитель отвечает за скорость сходимости}
+\]
+
+Особенности модификации метода: 
+\begin{itemize}
+    \item Скорость сходимости возрастает на порядки. Вместо сотен итераций может потребоваться несколько десятков.
+    \item Необзодимо занчть начальное приближение для $\chi$
+\end{itemize}
+\end{document}
