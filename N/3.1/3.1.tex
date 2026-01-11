@@ -1,0 +1,401 @@
+\documentclass[../../main.tex]{subfiles}
+
+\begin{document}
+\section{Трудности, возникающие при численном решении уравнения переноса}
+
+В общем случае уравнение переноса частиц имеет вид:
+\[
+\frac{1}{v(E)}\frac{\partial \Psi(\mathbf r,\boldsymbol{\Omega},E,t)}{\partial t}
++
+\boldsymbol{\Omega}\cdot\nabla \Psi(\mathbf r,\boldsymbol{\Omega},E,t)
++
+\Sigma_t(\mathbf r,E)\Psi
+=
+\]
+\[
+=
+\int_{4\pi}\!\!\int_0^\infty
+\Sigma_s(\mathbf r,E\!\to\!E',\boldsymbol{\Omega}\!\to\!\boldsymbol{\Omega'})
+\Psi(\mathbf r,\boldsymbol{\Omega},E,t)
+\,dE\,d\boldsymbol{\Omega}
++
+Q(\mathbf r,\boldsymbol{\Omega},E,t).
+\]
+
+Функция распределения зависит от координат, направления,
+энергии и времени:
+\[
+\Psi = \Psi(\mathbf r,\boldsymbol{\Omega},E,t).
+\]
+
+\subsection{Большая размерность пространства переменных}
+
+В стационарной задаче:
+\[
+\Psi = \Psi(x,y,z,\mu,\varphi,E),
+\qquad \mu=\cos\theta.
+\]
+
+Число неизвестных при дискретизации:
+\[
+N_{\text{неизв}} =
+N_x N_y N_z \cdot N_\mu N_\varphi \cdot N_E.
+\]
+
+Даже при умеренных сетках:
+\[
+N_{\text{неизв}} \sim 10^7\text{--}10^{10},
+\]
+что делает невозможным прямое обращение оператора переноса.
+
+\subsection{Плохая сходимость итераций по рассеянию}
+
+Используется итерационная схема:
+\[
+\boldsymbol{\Omega}\cdot\nabla \Psi^{(n+1)}
++
+\Sigma_t \Psi^{(n+1)}
+=
+\Sigma_s \Phi^{(n)} + Q,
+\]
+где
+\[
+\Phi(\mathbf r,E)
+=
+\int_{4\pi}\Psi(\mathbf r,\boldsymbol{\Omega},E)\,d\boldsymbol{\Omega}.
+\]
+
+Сходимость определяется спектральным радиусом:
+\[
+\rho \approx \frac{\Sigma_s}{\Sigma_t}.
+\]
+
+При
+\[
+\Sigma_s \to \Sigma_t
+\quad \Rightarrow \quad
+\rho \to 1,
+\]
+число итераций стремится к бесконечности:
+\[
+N_{\text{ит}} \sim \frac{1}{1-\rho}.
+\]
+
+\subsection{Анизотропия рассеяния}
+
+Индикатриса рассеяния раскладывается по полиномам Лежандра:
+\[
+\omega(\boldsymbol{\Omega}\cdot\boldsymbol{\Omega}')
+=
+\sum_{l=0}^\infty
+\frac{2l+1}{4\pi}\,\omega_l
+P_l(\boldsymbol{\Omega}\cdot\boldsymbol{\Omega}').
+\]
+
+При сильно анизотропном рассеянии коэффициенты $\omega_l$
+медленно убывают:
+\[
+\omega_l \not\to 0 \quad \text{при } l\to\infty.
+\]
+
+В методе сферических гармоник:
+\[
+\Psi(\mathbf r,\boldsymbol{\Omega})
+=
+\sum_{l=0}^N\sum_{m=-l}^l
+\psi_{lm}(\mathbf r)Y_l^m(\boldsymbol{\Omega}),
+\]
+что требует большого $N$ и приводит к осцилляциям решения
+и потере неотрицательности.
+
+\subsection{Энергетическая зависимость и многорезонансное поглощение}
+
+Макросечения зависят от энергии:
+\[
+\Sigma_t(E) = N\sigma_t(E).
+\]
+
+Резонансное микросечение имеет вид:
+\[
+\sigma(E)
+\sim
+\frac{\Gamma_n\Gamma_\gamma}
+{(E-E_r)^2 + (\Gamma/2)^2}.
+\]
+
+Для корректного описания требуется:
+\[
+\Delta E \ll \Gamma,
+\quad
+N_E \gg 1.
+\]
+
+Используется многогрупповое приближение:
+\[
+\Psi_g(\mathbf r,\boldsymbol{\Omega})
+=
+\int_{E_{g-1}}^{E_g}\Psi\,dE,
+\]
+но при этом возникает ошибка усреднения:
+\[
+\Sigma_{t,g}
+\neq
+\frac{\int_{E_{g-1}}^{E_g}\Sigma_t(E)\Psi(E)\,dE}
+{\int_{E_{g-1}}^{E_g}\Psi(E)\,dE}.
+\]
+
+\subsection{Связь уравнения переноса с другими физическими процессами}
+
+\subsubsection{Связь с теплопереносом}
+
+\[
+\rho c_p \frac{\partial T}{\partial t}
+=
+\nabla\cdot(k\nabla T)
++
+\int_0^\infty \kappa(E)\Sigma_f(E)\Phi(E)\,dE.
+\]
+
+Температура влияет на сечения:
+\[
+\Sigma_t(E,T) = \Sigma_t(E,T_0)f_D(T).
+\]
+
+\subsubsection{Связь с выгоранием топлива}
+
+\[
+\frac{dN_i}{dt}
+=
+-\sigma_{a,i}\Phi N_i
++
+\sum_j \lambda_{ji}N_j.
+\]
+
+\[
+\Sigma_t = \sum_i N_i\sigma_{t,i}.
+\]
+
+\subsubsection{Связь с нейтронной кинетикой}
+
+\[
+\frac{1}{v}\frac{\partial \Psi}{\partial t}
++
+\boldsymbol{\Omega}\cdot\nabla\Psi
++
+\Sigma_t\Psi
+=
+\int\Sigma_s\Psi\,d\Omega'
++
+\sum_i \chi_i C_i.
+\]
+
+\[
+\frac{dC_i}{dt}
+=
+\beta_i\int\nu\Sigma_f\Phi\,dE
+-
+\lambda_i C_i.
+\]
+
+\subsubsection{Связь с гидродинамикой}
+
+Рассматривается плоскопараллельная (или лагранжева) система координат.
+Радиация описывается уравнением переноса, связанного с уравнениями
+гидродинамики через источниковые члены.
+
+\[
+\frac{d\rho}{dt} + \rho\,\nabla \cdot \bf{u} = 0,
+\]
+где:
+\begin{itemize}
+\item $\rho$ — плотность вещества,
+\item $\bf{u}$ — скорость среды.
+\end{itemize}
+
+\[
+\rho \frac{d\bf{u}}{dt}
++ \nabla \left( p_e + p_i + p_\omega \right)
+=
+\int_0^\infty
+\frac{\chi_\nu}{c}
+\bf{W}_\nu \, d\nu.
+\]
+
+Здесь:
+\begin{itemize}
+\item $p_e$, $p_i$ — электронное и ионное давления,
+\item $p_\omega$ — давление излучения,
+\item $\chi_\nu$ — коэффициент взаимодействия излучения с веществом,
+\item $\bf{W}_\nu$ — поток излучательной энергии,
+\item $c$ — скорость света.
+\end{itemize}
+
+Правая часть описывает \textbf{обмен импульсом между излучением и веществом}.
+
+\textbf{Уравнение энергии электронов}
+
+\[
+\rho \frac{d\varepsilon_e}{dt}
++
+\nabla \cdot \boldsymbol{W}_e +
+\left(p_e + \delta \rho \omega
+\right)
+\nabla \cdot \boldsymbol{u}
+=
+\rho Q_{ei}
++
+\rho Q_e
++
+Q_r.
+\]
+
+Здесь:
+\begin{itemize}
+\item $\varepsilon_e$ — удельная энергия электронов,
+\item $\bf{W}_e$ — поток электронной энергии,
+\item $Q_{ei}$ — электрон-ионный энергообмен,
+\item $Q_e$ — внешние источники,
+\item $Q_r$ — обмен энергией с излучением.
+\end{itemize}
+
+\textbf{Уравнение энергии ионов}
+\[
+\rho \frac{d\varepsilon_i}{dt}
++
+\nabla \cdot \vec{W}_i
++
+\left(
+p_i + (1-\delta)\rho\omega
+\right)
+\nabla \cdot \vec{u}
+=
+\rho Q_{ie}.
+\]
+
+
+\textbf{Модель электрон-ионного релаксационного обмена}
+\[
+Q_{ie}
+=
+\frac{T_e - T_i}{\tau_{ei}},
+\]
+где:
+\begin{itemize}
+\item $T_e$, $T_i$ — температуры электронов и ионов,
+\item $\tau_{ei}$ — характерное время релаксации.
+\end{itemize}
+
+\textbf{Источник излучательной энергии}
+
+Спектральная плотность источника:
+\[
+Q_\nu
+=
+- \frac{\partial}{\partial z}
+\left[
+z \, F_\nu(z,\rho,T_e)
+\right].
+\]
+
+\textbf{Полный вклад излучения в энергетику}
+\[
+Q_r
+=
+\int_0^\infty
+\left(
+2\chi_\nu^a V_\nu^0
+-
+2\chi_\nu^a V_\nu^{0,\mathrm{eq}}
+\right)
+d\nu
+=
+-
+\int_0^\infty
+\left(
+\frac{\partial V_\nu^0}{\partial t}
++
+\nabla \cdot \vec{W}_\nu
+\right)
+d\nu.
+\]
+
+\textbf{Моменты интенсивности излучения}
+
+Нулевой и первый моменты:
+\[
+V_\nu^0(\boldsymbol{r},t)
+=
+\int_{4\pi}
+I(\boldsymbol{r},t,\boldsymbol{\Omega},\nu)\, d\boldsymbol{\Omega},
+\]
+\[
+\boldsymbol{W}_\nu(\boldsymbol{r},t)
+=
+\int_{4\pi}
+\boldsymbol{\Omega}\,
+I(\boldsymbol{r},t,\boldsymbol{\Omega},\nu)\, d\boldsymbol{\Omega}.
+\]
+
+\textbf{Уравнение переноса излучения}
+\[
+\frac{1}{c}\frac{\partial I}{\partial t}
++
+\boldsymbol{\Omega}\cdot\nabla I
++
+\left(
+\chi_\nu^a + \chi_\nu^s
+\right) I
+=
+\frac{\chi_\nu^s}{4\pi}
+\int_{4\pi}
+\omega(\boldsymbol{\Omega}\cdot\boldsymbol{\Omega}')
+I(\boldsymbol{r},\boldsymbol{\Omega}',t,\nu)\,
+d\boldsymbol{\Omega}'
++
+\chi_\nu^a B_\nu.
+\]
+
+Здесь:
+\begin{itemize}
+\item $I$ — интенсивность излучения,
+\item $\chi_\nu^a$, $\chi_\nu^s$ — коэффициенты поглощения и рассеяния,
+\item $\omega(\mu)$ — фазовая функция рассеяния,
+\item $B_\nu$ — функция Планка.
+\end{itemize}
+
+\subsection{Требования к разностной схеме}
+
+Разностная схема должна удовлетворять следующим условиям:
+
+\textbf{Устойчивость}
+\[
+\|\Psi^n\| \le C\|\Psi^0\|.
+\]
+
+\textbf{Сходимость}
+\[
+\lim_{h\to 0}\|\Psi_h - \Psi\| = 0.
+\]
+
+\textbf{Неотрицательность}
+\[
+\Psi_h \ge 0.
+\]
+
+\textbf{Баланс частиц}
+\[
+\int_V \Sigma_a\Phi\,dV
+=
+\int_V Q\,dV
++
+\int_{\partial V}\boldsymbol{J}\cdot d\mathbf S.
+\]
+
+\textbf{Корректная аппроксимация переноса}
+\[
+\boldsymbol{\Omega}\cdot\nabla\Psi
+\approx
+\frac{\Psi_i-\Psi_{i-\operatorname{sign}\mu}}{h}.
+\]
+
+\end{document}
