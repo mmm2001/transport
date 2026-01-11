@@ -1,0 +1,68 @@
+\documentclass[../../main/main.tex]{subfiles}
+
+\begin{document}
+\section{Введение в метод лебеговского осреднения Шилькова}
+
+Рассматривается разная ширина линии при разных температурах.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width = 0.9\textwidth]{6.3_pic1.png}
+\end{figure}
+
+Таким образом вводится осреднение Лебеговского типа.
+
+\subsubsection*{И снова информация из дипсика}
+
+\subsubsection*{Постановка задачи и цель метода}
+Рассматривается уравнение переноса (Больцмана) в среде со \textbf{случайными неоднородностями}:
+
+\begin{equation}\label{eq:main}
+    \mathbf{\Omega} \cdot \nabla \psi(\mathbf{r}, \mathbf{\Omega}) + \Sigma_t(\mathbf{r}, \omega) \, \psi(\mathbf{r}, \mathbf{\Omega}) = \int_{4\pi} \Sigma_s(\mathbf{r}, \mathbf{\Omega}\cdot\mathbf{\Omega}', \omega) \, \psi(\mathbf{r}, \mathbf{\Omega}') \, d\mathbf{\Omega}' + Q(\mathbf{r}, \mathbf{\Omega}),
+\end{equation}
+
+где $\Sigma_t(\mathbf{r}, \omega)$, $\Sigma_s(\mathbf{r}, \mathbf{\Omega}\cdot\mathbf{\Omega}', \omega)$ --- случайные поля (процессы), заданные на некотором вероятностном пространстве $(\Omega, \mathcal{F}, P)$, $\omega \in \Omega$ --- элементарное событие (реализация среды).
+
+\textbf{Цель:} Найти не решение $\psi$ для каждой реализации, а его \textbf{статистические моменты} --- математическое ожидание $\langle \psi \rangle$, корреляционную функцию $\langle \psi(\mathbf{r}_1) \psi(\mathbf{r}_2) \rangle$ и т.д., где $\langle \cdot \rangle$ обозначает осреднение по ансамблю реализаций.
+
+\subsubsection*{Идея метода}
+Метод Шилькова --- аналитический подход, основанный на комбинации:
+\begin{enumerate}
+    \item \textbf{Представления случайных коэффициентов} в виде:
+    \[
+    \Sigma(\mathbf{r}, \omega) = \langle \Sigma \rangle (\mathbf{r}) + \widetilde{\Sigma}(\mathbf{r}, \omega), \quad \langle \widetilde{\Sigma} \rangle = 0,
+    \]
+    где $\langle \Sigma \rangle$ --- регулярная (осреднённая) составляющая, $\widetilde{\Sigma}$ --- флуктуационная.
+    \item \textbf{Формального разложения} искомого решения в ряд по степеням малого параметра $\varepsilon$, характеризующего интенсивность флуктуаций.
+    \item \textbf{Последовательного осреднения} цепочки зацепляющихся уравнений для членов разложения с использованием аппарата теории случайных полей и функциональных производных.
+\end{enumerate}
+
+\subsubsection*{Ключевые этапы}
+\begin{enumerate}
+    \item \textbf{Линеаризация.} Уравнение (\ref{eq:main}) записывается в операторной форме:
+    \[
+    \mathcal{L}(\omega) \psi = Q, \quad \mathcal{L}(\omega) = \mathcal{L}_0 + \varepsilon \mathcal{L}_1(\omega),
+    \]
+    где $\mathcal{L}_0$ --- детерминированный оператор с осреднёнными коэффициентами, $\mathcal{L}_1$ --- случайный оператор, $\langle \mathcal{L}_1 \rangle = 0$.
+
+    \item \textbf{Разложение и осреднение.} Решение ищется в виде $\psi = \psi_0 + \varepsilon \psi_1 + \varepsilon^2 \psi_2 + \dots$. После подстановки в уравнение и осреднения получается система:
+    \begin{align*}
+        \mathcal{L}_0 \langle \psi_0 \rangle &= Q, \\
+        \mathcal{L}_0 \langle \psi_1 \rangle + \langle \mathcal{L}_1 \psi_0 \rangle &= 0, \\
+        \mathcal{L}_0 \langle \psi_2 \rangle + \langle \mathcal{L}_1 \psi_1 \rangle &= 0, \quad \text{и т.д.}
+    \end{align*}
+
+    \item \textbf{Лебеговское осреднение (замыкание).} Выражая $\psi_1$ через $\psi_0$ из уравнения для флуктуаций и подставляя в уравнение для $\langle \psi_2 \rangle$, получают \textbf{нелокальное эффективное уравнение} для осреднённого потока $\Psi \equiv \langle \psi \rangle$:
+    \begin{equation}\label{eq:effective}
+        \mathcal{L}_0 \Psi(\mathbf{r}) - \varepsilon^2 \int K(\mathbf{r}, \mathbf{r}') \, \Psi(\mathbf{r}') \, d\mathbf{r}' = Q(\mathbf{r}) + O(\varepsilon^4),
+    \end{equation}
+    где \textbf{ядро $K(\mathbf{r}, \mathbf{r}')$} выражается через корреляционные функции случайных полей $\widetilde{\Sigma}$ и функцию Грина оператора $\mathcal{L}_0$.
+\end{enumerate}
+
+
+\subsubsection*{Заключение}
+Метод лебеговского осреднения Ю.А. Шилькова представляет собой строгий аналитический аппарат для перехода от стохастического описания переноса к эффективному детерминированному уравнению для средних характеристик. Его сила --- в учёте \textbf{нелокальных корреляционных эффектов}, которые часто приводят к качественно новым явлениям по сравнению с простым усреднением коэффициентов.
+
+
+
+\end{document}
