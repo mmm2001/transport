@@ -1,0 +1,36 @@
+\documentclass[../../main/main.tex]{subfiles} 
+
+\begin{document}
+
+\section{Кубатуры на сфере для анизотропного рассеяния как прямое произведение сеток по каждому
+из углов отдельно}
+
+Угловое направление движения частицы $\Omega$ в сферической системе координат
+на сфере задается двумя углами $\theta, \quad \phi$ - полярный и азимутальный углы\\
+Полная угловая сетка строится как прямое произведение одномерных сеток по пространственным углам. \\
+Веса кубатур вычисляются как: $\omega_m = \omega_{ij} = \omega_{\mu_i} \cdot \omega_{\phi_j}$
+\\
+\\
+\begin{itemize}
+    \item Для посторения сетки по $\phi$ используется $2N$ равностоящих узлов
+    \item Для построения сетки по $\mu$ в качестве узлов выбираются нули многочленов Лежандра.
+          Такая квадратнурая формула точна для многочленво степени $2N-1$
+\end{itemize}
+Всего имеем сетку состоящую из   $2N^2$ узлов
+
+
+\begin{figure}[ht]
+    \centering
+    \begin{minipage}[t]{0.4\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{5.4_pic1.png}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.4\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{5.4_pic2.png}
+    \end{minipage}
+\end{figure}
+
+
+\end{document}
