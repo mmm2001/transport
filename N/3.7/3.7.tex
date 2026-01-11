@@ -1,0 +1,536 @@
+\documentclass[../../main.tex]{subfiles}
+
+\begin{document}
+\section{Влияние пространственно-угловой дискретизации уравнения переноса на сходимость итерационного процесса по рассеянию для алмазной схемы численного решения стационарного уравнения переноса в плоскопараллельной геометрии. Кинетически-согласованные и несогласованные разностные схемы для кинетических уравнений низкой размерности (LO).}
+
+Рассматривается стационарное уравнение переноса нейтронов:
+\begin{equation*}
+\mu \frac{\partial \Psi(x,\mu)}{\partial x}
++ \Sigma_t(x)\Psi(x,\mu)
+=
+\frac{\Sigma_s(x)}{2}\int_{-1}^{1}\Psi(x,\mu')\,d\mu'
++
+\frac{Q(x)}{2},
+\end{equation*}
+где
+\[
+\Phi(x)=\int_{-1}^{1}\Psi(x,\mu)\,d\mu
+\]
+— скалярный поток,
+$\mu=\cos\theta$ — угловая переменная,
+$\Sigma_t=\Sigma_a+\Sigma_s$ — полное макросечение.
+
+\
+
+\subsection{Пространственно-угловая дискретизация}
+
+Интегралы по $\mu$ аппроксимируются:
+\[
+\int_{-1}^{1} \Psi(x, \mu)\,d\mu
+\approx
+\sum_{n=1}^{N}\omega_n \Psi(x, \mu_n),
+\]
+где $\mu_n$ — корни многочлена Лежандра $P_N(\mu)$,
+$\omega_n = \int_{-1}^{1}\ln{x}dx$ — веса квадратуры, $\ln(x) = \prod_{j=1}^{N}\dfrac{x-x_j}{x_n - x_j}$ — вспомогательные функции Лагранжа.
+
+
+
+\subsection{Алмазная схема}
+
+Интегрируя уравнение переноса по ячейке
+$[x_{j-1/2},x_{j+1/2}]$,
+получаем алмазную схему:
+\begin{equation*}
+\mu_n
+\frac{\Psi(x_{j+1/2},\mu_n)-\Psi(x_{j-1/2},\mu_n)}{h_j}
++
+\Sigma_{t}(x_j)\Psi(x_j, \mu_n)
+=
+\frac{\Sigma_{s}(x_j)}{2}\Phi(x_j)+\frac{Q(x_j)}{2}.
+\end{equation*}
+
+Скалярный поток:
+\[
+\Phi(x_j) = \sum_{n=1}^{N}\omega_n \Psi(x_j, \mu_n),
+\qquad
+\Psi(x_j, \mu_n)=\frac{1}{2}
+\left(\Psi(x_{j+1/2},\mu_n)+\Psi(x_{j-1/2},\mu_n)\right).
+\]
+
+Алмазная схема является \textbf{кинетически несогласованной}.
+
+\subsection{Метод итераций источниика}
+
+\[\mu_n \dfrac{\Psi_{j+1/2, n}^{(\ell+1/2)} - \Psi_{j-1/2,n}^{(\ell+1/2)}}{h_j} + \Sigma_{t,j}\dfrac{1}{2}\left(\Psi_{j-1/2,n}^{(\ell+1/2)}+\Psi_{j+1/2,n}^{(\ell+1/2)}\right) = \dfrac{\Sigma_{s,j}}{2}\Phi_j^{(\ell)} + \dfrac{Q_j}{2}\]
+
+Граничные условия:
+\[
+\Psi_{j+1/2,n}^{(\ell+1/2)} = \Psi_n^{in}, \qquad \mu_n >0,
+\]
+\[
+\Psi_{J+1/2,n}^{(\ell+1/2)} = \Psi_{J+1/2,m}^{(\ell+1/2)}, \qquad \text{ где} \qquad \mu_n = -\mu_n < 0.
+\]
+
+\subsection{Метод бегущего счета (транспортный подход)}
+
+Граничные условия:
+\[
+\Psi_{j+1/2,n}^{(\ell+1/2)} = \dfrac{(2\mu_n - \Sigma_{t,j}h_j)\Psi_{j-1/2,n}^{(\ell+1/2)}+h_j\left(\Sigma_{s,j}\Phi_j^{(\ell)}+Q_j\right)}{2\mu_n+\Sigma_{t,j}h_j}, \qquad \mu_n>0: j =\dfrac{1}{2}\rightarrow\dfrac{3}{2}\rightarrow\cdots\rightarrow J+\dfrac{1}{2}
+\]
+
+\[
+\Psi_{j-1/2,n}^{(\ell+1/2)} = \dfrac{(2|\mu_n| - \Sigma_{t,j}h_j)\Psi_{j+1/2,n}^{(\ell+1/2)}+h_j\left(\Sigma_{s,j}\Phi_j^{(\ell)}+Q_j\right)}{2|\mu_n| + |\Sigma_{t,j}|h_j}, \qquad \mu_n = - \mu_m < 0:J+\dfrac{1}{2} \rightarrow \cdots \rightarrow \dfrac{1}{2}
+\]
+
+\[
+\Phi_j^{(\ell+1)}=\Phi_j^{(\ell+1/2)} = \sum_{n=1}^N \omega_n \Psi_{j,n}^{(\ell+1/2)} = \dfrac{1}{2} \sum_{n=1}^N \omega_n \left(\Psi_{j-1/2,n}^{(\ell+1/2)}+\Psi_{j+1/2,n}^{(\ell+1/2)}\right)
+\]
+Итерации до выполнения условия $||\Phi^{(\ell+1)} - \Phi^{(\ell)}|| \le \varepsilon$ - желаемая точность.
+
+\subsection{Фурье анализ сходимости}
+\[
+\Phi_j^{(\ell)} = \omega^{\ell} e^{i\Sigma_t\lambda x_j}, \qquad
+\Psi_{j,n}^{(\ell+1/2)} = \omega^{\ell} a_n e^{i\Sigma_t\lambda x_j},
+\]
+\[\Psi_{j+1/2,n}^{(\ell+1/2)} = \omega^{\ell}b_ne^{i\Sigma_t\lambda x_{j+1/2}}, \qquad \Phi_j^{(\ell+1/2)} = \omega^{\ell} \alpha e^{i\Sigma_t\lambda x_j}.
+\]
+
+Подставляем в уравнение переноса
+\[
+\mu_n \omega^{\ell}b_n \dfrac{e^{i\Sigma_t \lambda x_{j+1/2}} - e^{i\Sigma_t\lambda x_{j-1/2}}}{h_j} + \Sigma_{t,j} \omega^{\ell} a_{n} e^{i\Sigma_t \lambda x_j} = \dfrac{\Sigma_{s,j}}{2} \omega^{\ell}\alpha e^{i\Sigma_t\lambda x_j}
+\]
+\begin{enumerate}
+    \item $2i\dfrac{\mu_n}{h} b_n \sin{\dfrac{\Sigma_t h \lambda}{2}} + \Sigma_t a_n = \dfrac{\Sigma_s}{2}$
+    \item Алмазность схемы: $a_n = b_n \cos{\dfrac{\Sigma_t h \lambda}{2}}$
+    \item $\Phi = \int \Psi d \mu \Rightarrow \alpha = a_n \omega_n$
+    \item $\omega = \alpha \Rightarrow (\ell + 1/2 \rightarrow \ell + 1 )$
+\end{enumerate}
+
+Решение системы дает:
+\[
+a_n = \dfrac{c}{2} \dfrac{1}{1 + i \mu_n \Lambda}, \qquad \Lambda = \dfrac{2}{\Sigma_t h} \tan{\dfrac{\Sigma_t h \lambda}{2}},
+\]
+\[
+\omega_{SI} = \alpha(\Lambda) = \dfrac{c}{2} \sum_{n=1}^N
+\dfrac{\omega_n}{1 + \mu_n^2 \Lambda^2}, \qquad 2 = \int_{-1}^{1} d\mu = \sum_n \omega_k,
+\]
+\[
+\alpha = \max_{\Lambda}{\alpha(\Lambda)} = \alpha(0) = \dfrac{c}{2} \sum_{n=1}^N\omega_n = c.
+\]
+
+\subsection{Исследование DSA-ускорения для несогласованной схемы}
+
+
+\textbf{HO-задача (алмазная схема).}
+
+На половинном шаге итерации по рассеянию решается уравнение:
+\[
+\mu \frac{\partial \Psi^{(\ell+1/2)}(x,\mu)}{\partial x}
++ \Sigma_t \Psi^{(\ell+1/2)}(x,\mu)
+=
+\frac{\Sigma_s}{2}\,\Phi^{(\ell)}(x)
++ \frac{Q(x)}{2},
+\]
+где
+\[
+\Phi^{(\ell)}(x) = \int_{-1}^{1} \Psi^{(\ell)}(x,\mu)\,d\mu
+\]
+— скалярный поток на предыдущей итерации.
+
+\textbf{LO-задача DSA (диффузионное ускорение).}
+
+Для ускорения сходимости вводится диффузионная задача для поправки
+\(
+F^{(\ell+1)}(x)
+\):
+\[
+- \frac{1}{3}\frac{\partial}{\partial x}
+\left(
+\frac{1}{\Sigma_t(x)}
+\frac{\partial F^{(\ell+1)}(x)}{\partial x}
+\right)
++
+\Sigma_a(x) F^{(\ell+1)}(x)
+=
+\Sigma_s(x)\bigl(
+\Phi^{(\ell+1/2)}(x) - \Phi^{(\ell)}(x)
+\bigr).
+\]
+
+После решения LO-задачи выполняется коррекция скалярного потока:
+\[
+\phi^{(\ell+1)}(x) = \Phi^{(\ell+1/2)}(x) + F^{(\ell+1)}(x).
+\]
+
+Вводится равномерная сетка:
+\[
+x_{j\pm 1/2}, \qquad h_j = x_{j+1/2} - x_{j-1/2}.
+\]
+
+Интегрирование диффузионного уравнения по ячейке даёт:
+\[
+\int_{x_{j-1/2}}^{x_{j+1/2}} \Sigma_a F\,dx =
+h_j \Sigma_{a,j} F_j + h_{j+1} \Sigma_{a,j+1} F_{j+1},
+\]
+получаем дискретное LO-уравнение:
+\[
+-\frac{1}{3}
+\left[
+\frac{1}{\Sigma_{t,j+1}}
+\frac{F_{j+3/2}-F_{j+1/2}}{h_{j+1}}
+-
+\frac{1}{\Sigma_{t,j}}
+\frac{F_{j+1/2}-F_{j-1/2}}{h_{j}}
+\right]
++
+\left[\dfrac{\Sigma_{a,j+1/2}h_{j+1} + \Sigma_{a,j}h_j}{h_{j+1}+ h_j}\right] h_{j+1/2} F_{j+1/2}
+=
+\]
+\[
+= \dfrac{1}{2} \left[\Sigma_{s,j+1}h_{j+1}\left(\Phi_{j+1}^{(\ell+1/2)} - \Phi_{j+1}^{(\ell)}\right) + \Sigma_{s,j}h_{j}\left(\Phi_{j}^{(\ell+1/2)} - \Phi_{j}^{(\ell)}\right)\right].
+\]
+\[
+\Phi_j^{(\ell+1)} = \Phi_{j}^{(\ell+1/2)} + \dfrac{1}{2}\left(F_{j+1/2}^{(\ell+1)}+F_{j-1/2}^{(\ell+1)}\right).
+\]
+\textbf{Фурье-анализ в бесконечной среде.}
+
+Предполагается равномерная сетка:
+\[
+h = \text{const}, \qquad Q(x)=0.
+\]
+
+Ищем решение в виде одной Фурье-гармоники:
+\[
+F_{j+1/2}^{(\ell+1)}
+=
+\omega^\ell
+\beta
+e^{i\Sigma_t\lambda x_{j+1/2}},
+\qquad
+\beta
+=
+\frac{c(1-\alpha)\cos\!\left(\frac{\lambda \Sigma_t h}{2}\right)}
+{1-c+\frac{1}{3}
+\left(
+\frac{\sin(\lambda \Sigma_t h/2)}{\lambda \Sigma_t h/2}
+\right)^2},
+\]
+где
+\[
+c = \frac{\Sigma_s}{\Sigma_t}
+\]
+— отношение рассеяния.
+
+\[
+\omega
+= \alpha-
+\frac{c(1-\alpha)\cos^2\!\left(\frac{\lambda \Sigma_t h}{2}\right)}
+{1-c+\frac{1}{3}
+\left(
+\frac{\sin(\lambda \Sigma_t h/2)}{\lambda \Sigma_t h/2}
+\right)^2}
+\]
+
+\textbf{Фактор сходимости.}
+
+Итерационный множитель для DSA имеет вид:
+\[
+\omega(\lambda)
+=
+\alpha
+-
+\frac{c(1-\alpha)}
+{1-c+\frac{1}{3}\lambda^2},
+\]
+где параметр
+\[
+\lambda
+=
+\frac{2}{\Sigma_t h}
+\arctan\left(\frac{\Lambda \Sigma_t h}{2}\right)
+\]
+связан с пространственной дискретизацией.
+
+Минимальное и максимальное значения:
+\[
+\omega_{\min}(\lambda)
+=
+\alpha
+-
+\frac{c(1-\alpha)}{1-c+\frac{1}{3}\Lambda^2},
+\qquad
+\omega_{\max}(\lambda)
+=
+\alpha
+=
+\omega_{\text{SI}}.
+\]
+
+\subsection{Кинетически согласованные разностные схемы для LO-части}
+
+\textbf{Алмазная HO-схема.}
+
+На полуитерации по рассеянию решение
+\(
+\Psi^{(\ell+1/2)}_{j\pm 1/2,n}
+\)
+считается известным.
+Вводится ошибка:
+\[
+f^{(\ell+1/2)}_{j\pm 1/2,n}
+=
+\Psi_{j\pm 1/2,n} - \Psi^{(\ell+1/2)}_{j\pm 1/2,n}
+.
+\]
+
+Вычитая точное уравнение из дискретного, получаем уравнение для ошибки:
+\[
+\mu_n
+\frac{f_{j+1/2,n}
+-
+f_{j-1/2,n}}{h_j}
++
+\Sigma_{t,j} f_{j,n}
+-
+\frac{\Sigma_{s,j}}{2}
+\sum_{m=1}^{N} \omega_m f_{j,m}
+=
+\frac{\Sigma_{s,j}}{2}
+\left(
+\phi^{(\ell+1/2)}_j - \phi^{(\ell)}_j
+\right),
+\]
+где
+\[
+f_{j,n}
+=
+\frac12
+\left(
+f^{(\ell+1/2)}_{j+1/2,n}
++
+f^{(\ell+1/2)}_{j-1/2,n}
+\right).
+\]
+
+При $\mu_n > 0$:
+\[
+f_{1/2,n} = 0.
+\]
+
+При $\mu_n = - \mu_m < 0$:
+\[
+f_{J+1/2,n} = f_{J+1/2, m}.
+\]
+
+Используется приближение $P_1$:
+\[
+f_{j\pm 1/2,n}
+\approx
+\frac12
+\left(
+F_{j\pm 1/2}
++
+3 \mu_n G_{j\pm 1/2}
+\right),
+\]
+где:
+\[
+F = \int_{-1}^{1} f\,d\mu,
+\qquad
+G = \int_{-1}^{1} \mu f\,d\mu.
+\]
+
+Домножим уравнение на $\omega_n$ и просуммируем по $n$:
+\[
+\frac{1}{h_j}
+\left(
+G^{(\ell+1)}_{j+1/2}
+-
+G^{(\ell+1)}_{j-1/2}
+\right)
++
+\Sigma_{a,j} F^{(\ell+1)}_j
+=
+\Sigma_{s,j}
+\left(
+\Phi^{(\ell+1/2)}_j - \Phi^{(\ell)}_j
+\right).
+\]
+
+Домножим уравнение на $\mu_n \omega_n$ и просуммируем:
+\[
+\frac{1}{3h_j}
+\left(
+F^{(\ell+1)}_{j+1/2}
+-
+F^{(\ell+1)}_{j-1/2}
+\right)
++
+\Sigma_{t,j} G^{(\ell+1)}_j
+=
+0.
+\]
+
+Используются алмазные аппроксимации:
+\[
+F^{(\ell+1)}_j
+=
+\frac12
+\left(
+F^{(\ell+1)}_{j+1/2}
++
+F^{(\ell+1)}_{j-1/2}
+\right),
+\]
+\[
+G^{(\ell+1)}_j
+=
+\frac12
+\left(
+G^{(\ell+1)}_{j+1/2}
++
+G^{(\ell+1)}_{j-1/2}
+\right).
+\]
+
+\textit{Условие нулевого падающего потока:}
+\[
+\sum_{\mu_n>0} \mu_n \left(F_{1/2}^{(\ell+1) }+3\mu_n G_{1/2}^{(\ell+1) }\right)\,\omega_n = 0.
+\]
+
+\textit{Зеркальное отражение:}
+\[
+G^{(\ell+1/2)}_{j+1/2} = 0.
+\]
+
+Из проекций HO-уравнения на базисы $P_0$ и $P_1$ получена система:
+\begin{align}
+G_{j+1/2} - G_{j-1/2}
++ \frac{\Sigma_{a,j} h_j}{2}
+\left(
+F_{j+1/2} + F_{j-1/2}
+\right)
+&=
+\Sigma_{s,j} h_j
+\left(
+\Phi^{(\ell+1/2)}_j - \Phi^{(\ell)}_j
+\right),
+\tag{1}
+\\[6pt]
+G_{j+1/2} + G_{j-1/2}
++ \frac{2}{3}\Sigma_{t,j} h_j
+\left(
+F_{j+1/2} - F_{j-1/2}
+\right)
+&= 0.
+\tag{2}
+\end{align}
+
+Складывая и вычитая уравнения (1)–(2), получаем:
+\begin{equation}
+G_{j+1/2}
+=
+-\frac{1}{3}\Sigma_{t,j} h_j
+\left(
+F_{j+1/2} - F_{j-1/2}
+\right)
+-
+\frac{\Sigma_{a,j} h_j}{4}
+\left(
+F_{j+1/2} + F_{j-1/2}
+\right)
++
+\frac{\Sigma_{s,j} h_j}{2}
+\left(
+\Phi^{(\ell+1/2)}_j - \Phi^{(\ell)}_j
+\right),
+\tag{3}
+\end{equation}
+
+\[1 \le j \le J.\]
+
+Аналогичное выражение для соседней ячейки
+получается заменой $j \to j+1$:
+\begin{align}
+G_{j+1/2}
+&=
+-\frac{1}{3}\Sigma_{t,j+1} h_{j+1}
+\left(
+F_{j+3/2} - F_{j+1/2}
+\right)
+-
+\frac{\Sigma_{a,j+1} h_{j+1}}{4}
+\left(
+F_{j+3/2} + F_{j+1/2}
+\right)
+\nonumber\\
+&\quad
++
+\frac{\Sigma_{s,j+1} h_{j+1}}{2}
+\left(
+\Phi^{(\ell+1/2)}_{j+1} - \Phi^{(\ell)}_{j+1}
+\right).
+\tag{4}
+\end{align}
+
+Приравнивая правые части (3) и (4),
+получаем замкнутое разностное уравнение
+для потоков $F_{j\pm 1/2}$:
+\begin{align}
+&-\frac{1}{3}\Sigma_{t,j+1} h_{j+1}
+\left(
+F_{j+3/2} - F_{j+1/2}
+\right)
++
+\frac{1}{3}\Sigma_{t,j} h_j
+\left(
+F_{j+1/2} - F_{j-1/2}
+\right)
+\nonumber\\
+&\quad
+-
+\frac{\Sigma_{a,j+1} h_{j+1}}{4}
+\left(
+F_{j+3/2} + F_{j+1/2}
+\right)
++
+\frac{\Sigma_{a,j} h_j}{4}
+\left(
+F_{j+1/2} + F_{j-1/2}
+\right)
+\nonumber\\
+&=
+\frac{\Sigma_{s,j+1} h_{j+1}}{2}
+\left(
+\Phi^{(\ell+1/2)}_{j+1} - \Phi^{(\ell)}_{j+1}
+\right)
++
+\frac{\Sigma_{s,j} h_j}{2}
+\left(
+\Phi^{(\ell+1/2)}_{j} - \Phi^{(\ell)}_{j}
+\right).
+\tag{5}
+\end{align}
+
+После решения для $F$ скалярный поток обновляется по формуле:
+\[
+\phi^{(\ell+1)}_j
+=
+\phi^{(\ell+1/2)}_j
++
+\frac12
+\left(
+F^{(\ell+1)}_{j-1/2}
++
+F^{(\ell+1)}_{j+1/2}
+\right).
+\]
+
+Полученная схема:
+\begin{itemize}
+\item не требует непрерывного диффузионного предела;
+\item выводится строго из дискретного HO-уравнения;
+\item сохраняет спектр ошибок переноса;
+\item является \textbf{кинетически согласованной}.
+\end{itemize}
+\end{document}
